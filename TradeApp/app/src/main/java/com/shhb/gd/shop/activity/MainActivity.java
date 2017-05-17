@@ -134,9 +134,9 @@ public class MainActivity extends BaseActivity{
     private void initFragments() {
         fragments = new ArrayList<>();
         fragments.add(Fragment1.newInstance());
-        fragments.add(new Fragment2());
-        fragments.add(new Fragment3());
-        fragments.add(new Fragment4());
+        fragments.add(Fragment2.newInstance());
+        fragments.add(Fragment3.newInstance());
+        fragments.add(Fragment4.newInstance());
         buttonView.addOnPageChangeListener(pageChangeListener);
         viewPagerAdapter = new MainAdapter(getSupportFragmentManager(),fragments);
         buttonView.setAdapter(viewPagerAdapter);

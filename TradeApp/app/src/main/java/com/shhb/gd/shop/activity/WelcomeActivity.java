@@ -98,11 +98,13 @@ public class WelcomeActivity extends BaseActivity {
                 requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, Constants.PHONE_CODE);
             } else {
                 findBanner();
-                findByTabs();
+                findByHomeTabs();
+                findBy9Tabs();
             }
         } else {
             findBanner();
-            findByTabs();
+            findByHomeTabs();
+            findBy9Tabs();
         }
     }
 
@@ -128,7 +130,8 @@ public class WelcomeActivity extends BaseActivity {
                 if(permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){//用户同意SD读写权限
                     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},Constants.LOCATION_CODE);//定位权限
                     findBanner();
-                    findByTabs();
+                    findByHomeTabs();
+                    findBy9Tabs();
                 } else {
                     showAlertDialog(requestCode);
                 }
@@ -550,8 +553,10 @@ public class WelcomeActivity extends BaseActivity {
         }
     };
 
-
-    private void findByTabs() {
+    /**
+     * 查询首页的选项卡数据
+     */
+    private void findByHomeTabs() {
         OkHttpUtils okHttpUtils = new OkHttpUtils(20);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("cid","1");//分类
@@ -568,7 +573,32 @@ public class WelcomeActivity extends BaseActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
                 json = BaseTools.decryptJson(json);
-                PrefShared.saveString(context,"tabJson",json);
+                PrefShared.saveString(context,"homeTabJson",json);
+            }
+        }, parameter);
+    }
+
+    /**
+     * 查询9块9的选项卡数据
+     */
+    private void findBy9Tabs() {
+        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cid","1");//分类
+        jsonObject.put("size", "10");//条数
+        jsonObject.put("stype", "1");//0普通，1 9块9
+        String parameter = BaseTools.encodeJson(jsonObject.toString());
+        okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                json = BaseTools.decryptJson(json);
+                PrefShared.saveString(context,"9TabJson",json);
             }
         }, parameter);
     }

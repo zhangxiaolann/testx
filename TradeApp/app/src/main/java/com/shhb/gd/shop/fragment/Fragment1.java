@@ -2,7 +2,6 @@ package com.shhb.gd.shop.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,7 @@ public class Fragment1 extends BaseNavPagerFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_base_nav_pager, container, false);
+        return inflater.inflate(R.layout.fragment1, container, false);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class Fragment1 extends BaseNavPagerFragment {
 
     @Override
     protected List<String> getTitles() {
-        String json = PrefShared.getString(this.getContext(),"tabJson");
+        String json = PrefShared.getString(this.getContext(),"homeTabJson");
         List<String> titles = new ArrayList<>();
         try {
             JSONObject jsonObject = JSONObject.parseObject(json);
@@ -62,7 +61,7 @@ public class Fragment1 extends BaseNavPagerFragment {
 
     @Override
     protected List<String> getCId() {
-        String json = PrefShared.getString(this.getContext(),"tabJson");
+        String json = PrefShared.getString(this.getContext(),"homeTabJson");
         List<String> cId = new ArrayList<>();
         try {
             JSONObject jsonObject = JSONObject.parseObject(json);
@@ -85,8 +84,8 @@ public class Fragment1 extends BaseNavPagerFragment {
 
     @Override
     protected Fragment getFragment(int position) {
-        String cId = getCId().get(position);
-        Log.e("cId",cId);
-        return Fragment1_1.newInstance(Integer.parseInt(cId));
+        Log.e("cId",getCId().get(position));
+        String cId = getCId().get(position)+","+1;
+        return Fragment1_1.newInstance(cId);
     }
 }

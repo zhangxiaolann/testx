@@ -5,17 +5,22 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.widget.RelativeLayout;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by superMoon on 2017/3/15.
  */
 
 public class BaseFragment extends Fragment {
+    public Activity context;
     public KProgressHUD hud;
     public KProgressHUD failureHud;
-    public Activity context;
+    public RelativeLayout fatherView;
+    public WebView webView;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

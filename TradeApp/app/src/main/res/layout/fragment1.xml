@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/margin_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/logo_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/logo" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/y_img"
+            android:layout_toRightOf="@+id/logo_img"
+            android:background="@drawable/edit_view_bg"
+            android:drawableLeft="@mipmap/ico_search"
+            android:hint="搜索你喜欢的宝贝"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/y_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ico_message" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ico_cart" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <include
+        layout="@layout/fragment_base_nav_pager"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
+    <!--<android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        app:tabIndicatorColor="@color/btn_select"
+        app:tabMode="scrollable"
+        app:tabTextColor="@color/gray"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabSelectedTextColor="@color/btn_select" />
+
+    <com.shhb.gd.shop.view.CustomViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+</LinearLayout>

@@ -22,7 +22,10 @@ import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.shhb.gd.shop.R;
+import com.shhb.gd.shop.activity.DetailsActivity;
+import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.adapter.RecyclerViewAdapter;
+import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.module.UMShare;
 import com.shhb.gd.shop.tools.BaseTools;
@@ -44,6 +47,9 @@ import okhttp3.Response;
  */
 
 public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLoadMoreListener, RecyclerViewAdapter.OnItemClickListener,RecyclerViewAdapter.OnShareClickListener{
+    /** 1代表首页，2代表9块9 */
+    private int fType;
+    /** cId */
     private int mType;
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
@@ -57,10 +63,10 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
      */
     private final static int pageNum = 10;
 
-    public static Fragment1_1 newInstance(int type) {
+    public static Fragment1_1 newInstance(String type) {
         Fragment1_1 fragment = new Fragment1_1();
         Bundle bundle = new Bundle();
-        bundle.putInt("LAYOUT_MANAGER_TYPE", type);
+        bundle.putString("LAYOUT_MANAGER_TYPE",type);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -68,7 +74,10 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mType = getArguments().getInt("LAYOUT_MANAGER_TYPE");
+        String result = getArguments().getString("LAYOUT_MANAGER_TYPE");
+        String str[] = result.split(",");
+        mType = Integer.parseInt(str[0]);
+        fType = Integer.parseInt(str[1]);
         mAdapter = new RecyclerViewAdapter(mType);
     }
 
@@ -136,17 +145,34 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         if(null == userId){
             userId = "0";
         }
-        if(mType == 0){//首页
-            url = Constants.FIND_BY_GOODS1;
-            jsonObject.put("page_no", mPageIndex+"");//第几页
-            jsonObject.put("page_size", pageNum+"");//每个分类条数
-            jsonObject.put("system","1");//0iOS 1android
-            jsonObject.put("user_id", userId);//用户uid
-        } else {//非首页
+        if(fType == 1){//第一个Fragment
+            if(mType == 0){//首页
+                url = Constants.FIND_BY_GOODS1;
+                jsonObject.put("page_no", mPageIndex+"");//第几页
+                jsonObject.put("page_size", pageNum+"");//每个分类条数
+                jsonObject.put("system","1");//0iOS 1android
+                jsonObject.put("user_id", userId);//用户uid
+            } else {//非首页
+                if(mPageIndex == 1){//刷新
+                    url = Constants.FIND_BY_TABS_REFRESH;
+                    jsonObject.put("cid","1");//暂时是固定的传值
+                    jsonObject.put("stype", "0");//0 普通，1 9块9
+                    jsonObject.put("size", "10");//每个分类条数
+                } else {//加载
+                    url = Constants.FIND_BY_TABS_LOAD;
+                    jsonObject.put("cid",mType+"");//当前的cId
+                    jsonObject.put("page_no", mPageIndex+"");//第几页
+                    jsonObject.put("page_size", pageNum+"");//每个分类条数
+                    jsonObject.put("system","1");//0iOS 1android
+                    jsonObject.put("user_id", userId);//用户uid
+                    jsonObject.put("stype", "0");//0普通,1九块九
+                }
+            }
+        } else {//第二个Fragment
             if(mPageIndex == 1){//刷新
                 url = Constants.FIND_BY_TABS_REFRESH;
                 jsonObject.put("cid","1");//暂时是固定的传值
-                jsonObject.put("stype", "0");//0普通，1 9块9
+                jsonObject.put("stype", "1");//0 普通，1 9块9
                 jsonObject.put("size", "10");//每个分类条数
             } else {//加载
                 url = Constants.FIND_BY_TABS_LOAD;
@@ -155,7 +181,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                 jsonObject.put("page_size", pageNum+"");//每个分类条数
                 jsonObject.put("system","1");//0iOS 1android
                 jsonObject.put("user_id", userId);//用户uid
-                jsonObject.put("stype", "10");////0普通,1九块九
+                jsonObject.put("stype", "1");//0普通,1九块九
             }
         }
         Log.e("传入的参数",jsonObject.toString());
@@ -218,6 +244,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                     map.put("rebate", jsonObject.getString("rating"));
                     map.put("numId", jsonObject.getString("num_iid"));
                     map.put("shareUrl", jsonObject.getString("share_url"));
+                    map.put("couponUrl",jsonObject.getString("url"));
                     listMap.add(map);
                 }
                 mAdapter.addData(listMap);
@@ -288,7 +315,34 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
 
     @Override
     public void onItemClick(View view, int position,List<Map<String,Object>> listMap) {
-        Toast.makeText(context, "单击Item的第"+position+"项目", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "单击Item的第"+position+"项目", Toast.LENGTH_SHORT).show();
+        Intent intent;
+        String userId = PrefShared.getString(context,"userId");
+        String nick = PrefShared.getString(context,"nick");
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("store_type",listMap.get(position).get("type")+"");
+            jsonObject.put("goods_id",listMap.get(position).get("numId")+"");
+            jsonObject.put("vocher_url",listMap.get(position).get("couponUrl")+"");
+            jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
+            jsonObject.put("shareContent","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+            jsonObject.put("shareImg",listMap.get(position).get("imgUrl")+"");
+            jsonObject.put("shareUrl",listMap.get(position).get("shareUrl")+"");
+            if(null != userId && !TextUtils.equals(userId,"")){
+                if(null != nick && !TextUtils.equals(nick,"")){
+                    intent = new Intent(context, DetailsActivity.class);
+                    intent.putExtra("result", jsonObject.toString());
+                    context.startActivity(intent);
+                } else {
+                    new AlibcUser(context).login();
+                }
+            } else {
+                intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
