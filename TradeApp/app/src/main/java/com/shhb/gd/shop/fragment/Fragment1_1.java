@@ -325,9 +325,10 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
             jsonObject.put("goods_id",listMap.get(position).get("numId")+"");
             jsonObject.put("vocher_url",listMap.get(position).get("couponUrl")+"");
             jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
-            jsonObject.put("shareContent","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
-            jsonObject.put("shareImg",listMap.get(position).get("imgUrl")+"");
-            jsonObject.put("shareUrl",listMap.get(position).get("shareUrl")+"");
+            jsonObject.put("content","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+            jsonObject.put("share_img",listMap.get(position).get("imgUrl")+"");
+            jsonObject.put("share_url",listMap.get(position).get("shareUrl")+"");
+            Log.e("进入商品详情",jsonObject.toString());
             if(null != userId && !TextUtils.equals(userId,"")){
                 if(null != nick && !TextUtils.equals(nick,"")){
                     intent = new Intent(context, DetailsActivity.class);

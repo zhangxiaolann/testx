@@ -200,7 +200,7 @@ public class DetailsActivity extends BaseActivity implements View.OnClickListene
     private void loadData() {
         AlibcShow.showH5(DetailsActivity.this,webView, kitWcClient,new AlibcDetailPage(numId));
         findByShareMsg();
-        if(TextUtils.equals(couponUrl,"")){
+        if(TextUtils.equals(couponUrl,"") || TextUtils.equals(couponUrl,"null")){
             bottomAll.setVisibility(View.GONE);
         } else {
             if(!TextUtils.equals(couponType,"1")){
