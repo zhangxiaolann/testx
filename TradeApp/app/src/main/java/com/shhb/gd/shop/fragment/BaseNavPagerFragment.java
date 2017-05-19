@@ -56,6 +56,7 @@ public abstract class BaseNavPagerFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         viewPager = (CustomViewPager) view.findViewById(R.id.viewPager);
+        viewPager.setCurrentItem(0,false);
         viewPager.setScanScroll(true);
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity{
     /** 底部按钮*/
     private static BottomNavigationBar navigationBar;
     /** 去掉首页ViewPager点击动画*/
-    private boolean isAnimation = true;
+    private boolean isAnimation = false;
     private ArrayList<Fragment> fragments;
     private MainAdapter viewPagerAdapter;
     /** Fragment中单击分享或WebView加载完毕的广播接收器*/
