@@ -29,8 +29,10 @@ public class Constants {
     public static final String REQUEST = "http://es3.laizhuan.com/shopping_new/";//正式服务器
     /** 下载补丁的地址*/
     public static final String PATCH_URL = "http://es1.laizhuan.com/shopping/Shop/android?name=out.apatch";
-    /** 查找图片的张数*/
+    /** 查找开化页的图片*/
     public static final String FIND_BY_IMG = REQUEST + "index/opening";
+    /** 查找首页的banner图片*/
+    public static final String FIND_BY_BANNER = REQUEST + "index/banners";
     /** 查找选项卡和对应的内容(上拉刷新的时候)*/
     public static final String FIND_BY_TABS_REFRESH = REQUEST + "GoodsShow/cateGoods";
     /** 查找选项卡和对应的内容(下拉加载的时候)*/

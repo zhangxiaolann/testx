@@ -23,6 +23,7 @@ import com.shhb.gd.shop.activity.DetailsActivity;
 import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.adapter.RecyclerViewAdapter;
 import com.shhb.gd.shop.module.AlibcUser;
+import com.shhb.gd.shop.module.BannerInfo;
 import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
@@ -42,7 +43,7 @@ import okhttp3.Response;
  * Created by superMoon on 2017/3/15.
  */
 
-public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLoadMoreListener, RecyclerViewAdapter.OnItemClickListener,RecyclerViewAdapter.OnShareClickListener{
+public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLoadMoreListener, RecyclerViewAdapter.OnClickListener{
     /** 1代表首页，2代表9块9 */
     private int fType;
     /** cId */
@@ -98,8 +99,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         }
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
-        mAdapter.setShareClickListener(this);
+        mAdapter.setOnClickListener(this);
 
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -230,11 +230,46 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                     map.put("couponUrl",jsonObject.getString("url"));
                     listMap.add(map);
                 }
-                mAdapter.addData(listMap);
+                mAdapter.addRecyclerData(listMap);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 查询banner信息
+     */
+    private void findByBanner(){
+        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
+        okHttpUtils.postEnqueue(Constants.FIND_BY_BANNER, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                try {
+                    JSONObject jsonObject = JSONObject.parseObject(json);
+                    int status = jsonObject.getInteger("status");
+                    if(1 == status){
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        final List<BannerInfo> bannerList = new ArrayList<>();
+                        for(int i = 0;i < jsonArray.size();i++){
+                            jsonObject = jsonArray.getJSONObject(i);
+                            BannerInfo banner = new BannerInfo();
+                            banner.setAvatar(jsonObject.getString("icon_url"));
+                            banner.setName("第"+(i+1)+"张图");
+                            bannerList.add(banner);
+                        }
+                        mAdapter.addBannerData(bannerList);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }, "");
     }
 
     /**
@@ -244,6 +279,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         mPageIndex = 1;
         swipeToLoadLayout.setRefreshing(true);
         findByGoods();
+        findByBanner();
     }
 
     /**
@@ -258,12 +294,6 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
     @Override
     public void onRefresh() {
         refreshRequestList();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeToLoadLayout.setRefreshing(false);
-//            }
-//        }, 2000);
     }
 
     @Override
@@ -297,56 +327,68 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
     }
 
     @Override
-    public void onItemClick(View view, int position,List<Map<String,Object>> listMap) {
-//        Toast.makeText(context, "单击Item的第"+position+"项目", Toast.LENGTH_SHORT).show();
-        Intent intent;
-        String userId = PrefShared.getString(context,"userId");
-        String nick = PrefShared.getString(context,"nick");
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("store_type",listMap.get(position).get("type")+"");
-            jsonObject.put("goods_id",listMap.get(position).get("numId")+"");
-            jsonObject.put("vocher_url",listMap.get(position).get("couponUrl")+"");
-            jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
-            jsonObject.put("content","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
-            jsonObject.put("share_img",listMap.get(position).get("imgUrl")+"");
-            jsonObject.put("share_url",listMap.get(position).get("shareUrl")+"");
-            Log.e("进入商品详情",jsonObject.toString());
-            if(null != userId && !TextUtils.equals(userId,"")){
-                if(null != nick && !TextUtils.equals(nick,"")){
-                    intent = new Intent(context, DetailsActivity.class);
-                    intent.putExtra("result", jsonObject.toString());
-                    context.startActivity(intent);
-                } else {
-                    new AlibcUser(context).login();
-                }
-            } else {
-                intent = new Intent(context, LoginActivity.class);
-                context.startActivity(intent);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.group_1_1:
+                break;
+            case R.id.group_1_2:
+                break;
+            case R.id.group_1_3:
+                break;
+            case R.id.group_1_4:
+                break;
+            case R.id.group_2_1:
+                break;
+            case R.id.group_2_2:
+                break;
         }
     }
 
     @Override
-    public void onShareClick(View view, int position,List<Map<String,Object>> listMap) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("numId",listMap.get(position).get("numId")+"");
-        jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
-        jsonObject.put("shareContent","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
-        jsonObject.put("shareImg",listMap.get(position).get("imgUrl")+"");
-        jsonObject.put("shareUrl",listMap.get(position).get("shareUrl")+"");
-        Intent intent = new Intent(Constants.SENDMSG_SHARE);
-        intent.putExtra("result",jsonObject.toString());
-        context.sendBroadcast(intent);
-
-//        Toast.makeText(context, "单击分享的第"+position+"项目", Toast.LENGTH_SHORT).show();
-//        String numId = (String) listMap.get(position).get("numId");
-//        String shareTitle = "惠淘分享，"+(String) listMap.get(position).get("title");
-//        String shareContent = "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！";
-//        String shareImg = (String) listMap.get(position).get("imgUrl");
-//        String shareUrl = (String) listMap.get(position).get("shareUrl");
-//        new UMShare(context,hud,failureHud,numId).share(shareTitle,shareContent,shareImg,shareUrl);
+    public void onClick(View view, int position, List<Map<String, Object>> listMap) {
+        Intent intent;
+        JSONObject jsonObject;
+        switch (view.getId()){
+            case R.id.share_img:
+                jsonObject = new JSONObject();
+                jsonObject.put("numId",listMap.get(position).get("numId")+"");
+                jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
+                jsonObject.put("shareContent","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+                jsonObject.put("shareImg",listMap.get(position).get("imgUrl")+"");
+                jsonObject.put("shareUrl",listMap.get(position).get("shareUrl")+"");
+                intent = new Intent(Constants.SENDMSG_SHARE);
+                intent.putExtra("result",jsonObject.toString());
+                context.sendBroadcast(intent);
+                break;
+            default:
+                String userId = PrefShared.getString(context,"userId");
+                String nick = PrefShared.getString(context,"nick");
+                try {
+                    jsonObject = new JSONObject();
+                    jsonObject.put("store_type",listMap.get(position).get("type")+"");
+                    jsonObject.put("goods_id",listMap.get(position).get("numId")+"");
+                    jsonObject.put("vocher_url",listMap.get(position).get("couponUrl")+"");
+                    jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
+                    jsonObject.put("content","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+                    jsonObject.put("share_img",listMap.get(position).get("imgUrl")+"");
+                    jsonObject.put("share_url",listMap.get(position).get("shareUrl")+"");
+                    Log.e("进入商品详情",jsonObject.toString());
+                    if(null != userId && !TextUtils.equals(userId,"")){
+                        if(null != nick && !TextUtils.equals(nick,"")){
+                            intent = new Intent(context, DetailsActivity.class);
+                            intent.putExtra("result", jsonObject.toString());
+                            context.startActivity(intent);
+                        } else {
+                            new AlibcUser(context).login();
+                        }
+                    } else {
+                        intent = new Intent(context, LoginActivity.class);
+                        context.startActivity(intent);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 }

@@ -35,21 +35,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_GROUP = 1;
     /** recycler的ItemView标识 */
     private static final int TYPE_RECYCLER = 2;
-    /** banner的数据 */
-    private final List<BannerInfo> bannerInfos;
+//    /** banner的数据 */
+    private List<BannerInfo> bannerInfos;
     /** recycler的数据 */
     private List<Map<String, Object>> listMap;
-    private static OnShareClickListener mShareClickListener;
-    private static OnItemClickListener mItemClickListener;
+    private static OnClickListener onClickListener;
+    private LoopViewPagerAdapter mPagerAdapter;
 
 
     public RecyclerViewAdapter(int type) {
         this.mType = type;
-        bannerInfos = new ArrayList<>();
     }
 
-    /** 通过异步请求将数据填充到Adapter */
-    public void addData(List<Map<String, Object>> listMap) {
+    /** 通过异步请求将列表的数据填充到Adapter */
+    public void addRecyclerData(List<Map<String, Object>> listMap) {
         if(null == listMap || listMap.isEmpty()){
             return;
         }
@@ -57,6 +56,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.listMap = new ArrayList<>();
         }
         this.listMap.addAll(listMap);
+    }
+
+    /** 通过异步请求将Banner的数据填充到Adapter */
+    public void addBannerData(List<BannerInfo> bannerInfos) {
+        if(null == bannerInfos || bannerInfos.isEmpty()){
+            return;
+        }
+        if(null == this.bannerInfos){
+            this.bannerInfos = new ArrayList<>();
+        }
+        this.bannerInfos.addAll(bannerInfos);
     }
 
     @Override
@@ -118,10 +128,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int type = getItemViewType(i);
         switch (type) {
             case TYPE_BANNER:
-                onBindBannerHolder((BannerHolder) viewHolder);
+                onBindBannerHolder((BannerHolder) viewHolder,i);
                 break;
             case TYPE_GROUP:
-                onBindGroupHolder((GroupHolder) viewHolder);
+//                onBindGroupHolder((GroupHolder) viewHolder);
                 break;
             case TYPE_RECYCLER:
                 onBindRecyclerHolder((RecyclerHolder) viewHolder,i);
@@ -132,18 +142,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     /**
      * 将数据填充到banner上
      * @param viewHolder
+     * @param position
      */
-    private void onBindBannerHolder(BannerHolder viewHolder) {
-
+    private void onBindBannerHolder(BannerHolder viewHolder, int position) {
+        if (viewHolder.viewPager.getAdapter() == null) {
+            mPagerAdapter = new LoopViewPagerAdapter(viewHolder.viewPager, viewHolder.indicators);
+            viewHolder.viewPager.setAdapter(mPagerAdapter);
+            viewHolder.viewPager.addOnPageChangeListener(mPagerAdapter);
+            mPagerAdapter.setList(bannerInfos);
+        } else {
+            mPagerAdapter.setList(bannerInfos);
+        }
     }
 
-    /**
-     * 将数据填充到中间区域上
-     * @param viewHolder
-     */
-    private void onBindGroupHolder(GroupHolder viewHolder) {
-
-    }
+//    /**
+//     * 将数据填充到中间区域上
+//     * @param viewHolder
+//     */
+//    private void onBindGroupHolder(GroupHolder viewHolder) {
+//
+//    }
 
     /**
      * 将数据填充到recycler上
@@ -183,18 +201,54 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public BannerHolder(View itemView) {
             super(itemView);
             viewPager = (CustomViewPager) itemView.findViewById(R.id.viewPager);
+            viewPager.setScanScroll(true);
             indicators = (ViewGroup) itemView.findViewById(R.id.indicators);
         }
     }
 
-    static class GroupHolder extends RecyclerView.ViewHolder{
-        private LinearLayout groupMain;
+    class GroupHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private TextView group11,group12,group13,group14;
+        private RelativeLayout group21,group22;
 
         /** 获取到中间区域中的每一个View */
         public GroupHolder(View itemView){
             super(itemView);
-            groupMain = (LinearLayout) itemView.findViewById(R.id.group_main);
-//            groupMain.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+            group11 = (TextView) itemView.findViewById(R.id.group_1_1);
+            group12 = (TextView) itemView.findViewById(R.id.group_1_2);
+            group13 = (TextView) itemView.findViewById(R.id.group_1_3);
+            group14 = (TextView) itemView.findViewById(R.id.group_1_4);
+            group21 = (RelativeLayout) itemView.findViewById(R.id.group_2_1);
+            group22 = (RelativeLayout) itemView.findViewById(R.id.group_2_2);
+            group11.setOnClickListener(this);
+            group12.setOnClickListener(this);
+            group13.setOnClickListener(this);
+            group14.setOnClickListener(this);
+            group21.setOnClickListener(this);
+            group22.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.group_1_1:
+                    onClickListener.onClick(view);
+                    break;
+                case R.id.group_1_2:
+                    onClickListener.onClick(view);
+                    break;
+                case R.id.group_1_3:
+                    onClickListener.onClick(view);
+                    break;
+                case R.id.group_1_4:
+                    onClickListener.onClick(view);
+                    break;
+                case R.id.group_2_1:
+                    onClickListener.onClick(view);
+                    break;
+                case R.id.group_2_2:
+                    onClickListener.onClick(view);
+                    break;
+            }
         }
     }
 
@@ -229,33 +283,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.share_img:
-                    mShareClickListener.onShareClick(view,getPosition(),listMap);
+                    onClickListener.onClick(view,getPosition(),listMap);
                     break;
                 default:
-                    mItemClickListener.onItemClick(view, getPosition(),listMap);
+                    onClickListener.onClick(view,getPosition(),listMap);
                     break;
             }
         }
     }
 
-    /** 定义分享的单击接口 */
-    public interface OnShareClickListener {
-        void onShareClick(View view, int position,List<Map<String,Object>> listMap);
+    /** 定义所有单击事件接口 */
+    public interface OnClickListener {
+        void onClick(View view,int position,List<Map<String,Object>> listMap);
+        void onClick(View view);
     }
 
-    /** 定义item的单击接口 */
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position,List<Map<String,Object>> listMap);
-    }
-
-    /** 分享按钮单击事件 */
-    public void setShareClickListener(final  OnShareClickListener mShareClickListener){
-        this.mShareClickListener = mShareClickListener;
-    }
-
-    /** item按钮单击事件 */
-    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
+    /** 所有单击事件的处理方法 */
+    public void setOnClickListener(final OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
 
