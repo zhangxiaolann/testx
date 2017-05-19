@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.ali.auth.third.ui.context.CallbackContext;
 import com.alibaba.fastjson.JSONObject;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -100,7 +101,7 @@ public class MainActivity extends BaseActivity{
 //                .setAnimationDuration(1000)
 //                .setHideOnSelect(true);//当选中状态时消失，非选中状态显示
         navigationBar
-                .addItem(new BottomNavigationItem(R.mipmap.btn_home_on,"抢购").setInactiveIconResource(R.mipmap.btn_home))
+                .addItem(new BottomNavigationItem(R.mipmap.btn_home_on,"首页").setInactiveIconResource(R.mipmap.btn_home))
                 .addItem(new BottomNavigationItem(R.mipmap.btn_9_on,"9块9").setInactiveIconResource(R.mipmap.btn_9))
                 .addItem(new BottomNavigationItem(R.mipmap.btn_share_on,"邀请赚").setInactiveIconResource(R.mipmap.btn_share))
                 .addItem(new BottomNavigationItem(R.mipmap.btn_me_on,"我的").setInactiveIconResource(R.mipmap.btn_me))
@@ -216,12 +217,14 @@ public class MainActivity extends BaseActivity{
     }
 
     /**
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
+    * 淘宝和友盟的回调
+    * @param requestCode
+    * @param resultCode
+    * @param data
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        CallbackContext.onActivityResult(requestCode, resultCode, data);//阿里的回调
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);//友盟精简版的回调
     }
 

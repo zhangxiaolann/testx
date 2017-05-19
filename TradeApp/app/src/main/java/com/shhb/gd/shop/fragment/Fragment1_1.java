@@ -2,32 +2,28 @@ package com.shhb.gd.shop.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.activity.DetailsActivity;
 import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.adapter.RecyclerViewAdapter;
 import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.module.Constants;
-import com.shhb.gd.shop.module.UMShare;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
@@ -94,8 +90,13 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         swipeToLoadLayout.setOnLoadMoreListener(this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.swipe_target);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        RecyclerView.LayoutManager layoutManager;
+        if(mType == 0){
+            layoutManager = new LinearLayoutManager(getContext());
+        } else {
+            layoutManager = new GridLayoutManager(getContext(), 2);
+        }
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setShareClickListener(this);
@@ -145,34 +146,16 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         if(null == userId){
             userId = "0";
         }
-        if(fType == 1){//第一个Fragment
-            if(mType == 0){//首页
-                url = Constants.FIND_BY_GOODS1;
-                jsonObject.put("page_no", mPageIndex+"");//第几页
-                jsonObject.put("page_size", pageNum+"");//每个分类条数
-                jsonObject.put("system","1");//0iOS 1android
-                jsonObject.put("user_id", userId);//用户uid
-            } else {//非首页
-                if(mPageIndex == 1){//刷新
-                    url = Constants.FIND_BY_TABS_REFRESH;
-                    jsonObject.put("cid","1");//暂时是固定的传值
-                    jsonObject.put("stype", "0");//0 普通，1 9块9
-                    jsonObject.put("size", "10");//每个分类条数
-                } else {//加载
-                    url = Constants.FIND_BY_TABS_LOAD;
-                    jsonObject.put("cid",mType+"");//当前的cId
-                    jsonObject.put("page_no", mPageIndex+"");//第几页
-                    jsonObject.put("page_size", pageNum+"");//每个分类条数
-                    jsonObject.put("system","1");//0iOS 1android
-                    jsonObject.put("user_id", userId);//用户uid
-                    jsonObject.put("stype", "0");//0普通,1九块九
-                }
-            }
-        } else {//第二个Fragment
+        if(mType == 0){//首页
+            url = Constants.FIND_BY_GOODS1;
+            jsonObject.put("page_no", mPageIndex+"");//第几页
+            jsonObject.put("page_size", pageNum+"");//每个分类条数
+            jsonObject.put("system","1");//0iOS 1android
+            jsonObject.put("user_id", userId);//用户uid
+        } else {//非首页
             if(mPageIndex == 1){//刷新
                 url = Constants.FIND_BY_TABS_REFRESH;
                 jsonObject.put("cid","1");//暂时是固定的传值
-                jsonObject.put("stype", "1");//0 普通，1 9块9
                 jsonObject.put("size", "10");//每个分类条数
             } else {//加载
                 url = Constants.FIND_BY_TABS_LOAD;
@@ -181,8 +164,8 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                 jsonObject.put("page_size", pageNum+"");//每个分类条数
                 jsonObject.put("system","1");//0iOS 1android
                 jsonObject.put("user_id", userId);//用户uid
-                jsonObject.put("stype", "1");//0普通,1九块九
             }
+            jsonObject.put("stype", fType+"");//0 普通，1 9块9
         }
         Log.e("传入的参数",jsonObject.toString());
         String parameter = BaseTools.encodeJson(jsonObject.toString());

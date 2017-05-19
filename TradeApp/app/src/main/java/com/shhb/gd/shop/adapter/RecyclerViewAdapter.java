@@ -35,7 +35,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_GROUP = 1;
     /** recycler的ItemView标识 */
     private static final int TYPE_RECYCLER = 2;
-    private List<Integer> types = new ArrayList<>();
     /** banner的数据 */
     private final List<BannerInfo> bannerInfos;
     /** recycler的数据 */
@@ -73,17 +72,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      * @param position
      * @return
      */
-//    @Override
-//    public int getItemViewType(int position) {
-//        Log.e("getItemViewType的值",position+"");
-//        if (position == mType) {
-//            return TYPE_GROUP;
-//        } /*else if (position == 1) {
-//            return TYPE_GROUP;
-//        }*/ else {
-//            return TYPE_RECYCLER;
-//        }
-//    }
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0 && mType == 0){
+            return TYPE_BANNER;
+        } else if(position == 1 && mType == 0){
+            return TYPE_GROUP;
+        } else {
+            return TYPE_RECYCLER;
+        }
+    }
 
     /** 初始化布局包括布局的位置和大小 */
     @Override
@@ -91,22 +89,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int type = getItemViewType(i);
         View itemView = null;
         switch (type){
-            case 0:
-                itemView = inflate(viewGroup,R.layout.recycler_item);
+            case TYPE_BANNER:
+                itemView = inflate(viewGroup, R.layout.banner_view);
+                return new BannerHolder(itemView);
+            case TYPE_GROUP:
+                itemView = inflate(viewGroup, R.layout.group_view);
+                return new GroupHolder(itemView);
+            case TYPE_RECYCLER:
+                itemView = inflate(viewGroup, R.layout.recycler_item);
                 return new RecyclerHolder(itemView);
-//            case TYPE_BANNER:
-//                if(mType == 0){
-//                    itemView = inflate(viewGroup,R.layout.banner_view);
-//                    return new BannerHolder(itemView);
-//                }
-//            case TYPE_GROUP:
-//                if(mType == 0){
-//                    itemView = inflate(viewGroup,R.layout.group_view);
-//                    return new GroupHolder(itemView);
-//                }
-//            case TYPE_RECYCLER:
-//                itemView = inflate(viewGroup,R.layout.recycler_item);
-//                return new RecyclerHolder(itemView);
         }
         throw new IllegalArgumentException("Wrong type!");
     }
@@ -119,6 +110,69 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      */
     private View inflate(ViewGroup parent, int layoutRes) {
         return LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
+    }
+
+    /** 将数据绑定到对应的View上 */
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        int type = getItemViewType(i);
+        switch (type) {
+            case TYPE_BANNER:
+                onBindBannerHolder((BannerHolder) viewHolder);
+                break;
+            case TYPE_GROUP:
+                onBindGroupHolder((GroupHolder) viewHolder);
+                break;
+            case TYPE_RECYCLER:
+                onBindRecyclerHolder((RecyclerHolder) viewHolder,i);
+                break;
+        }
+    }
+
+    /**
+     * 将数据填充到banner上
+     * @param viewHolder
+     */
+    private void onBindBannerHolder(BannerHolder viewHolder) {
+
+    }
+
+    /**
+     * 将数据填充到中间区域上
+     * @param viewHolder
+     */
+    private void onBindGroupHolder(GroupHolder viewHolder) {
+
+    }
+
+    /**
+     * 将数据填充到recycler上
+     * @param viewHolder
+     * @param position
+     */
+    private void onBindRecyclerHolder(RecyclerHolder viewHolder, int position) {
+        int width = (int) (BaseTools.getWindowsWidth((Activity) viewHolder.itemView.getContext()) / 2);
+        width = width - (width % 10);
+        String url = listMap.get(position).get("imgUrl") + "_" + width + "x" + width + ".jpg";
+        Log.e("图片的地址为：", url);
+        Glide.with(viewHolder.itemView.getContext())
+                .load(url)
+                .placeholder(R.mipmap.error_z)
+                .error(R.mipmap.error_z)//加载出错的图片
+                .priority(Priority.HIGH)//优先加载
+                .diskCacheStrategy(DiskCacheStrategy.ALL)//设置缓存策略
+                .into(viewHolder.goodsImg);
+        String type = listMap.get(position).get("type") + "";
+        if(TextUtils.equals(type,"0")){
+            viewHolder.type.setText("淘宝");
+        } else {
+            viewHolder.type.setText("天猫");
+        }
+        viewHolder.title.setText("\u3000\u3000 "+listMap.get(position).get("title"));
+        viewHolder.cPrice.setText("￥" + listMap.get(position).get("cPrice") + "");
+        viewHolder.oPrice.setText(listMap.get(position).get("oPrice") + "");
+        viewHolder.bNum.setText("(" + listMap.get(position).get("bNum") + "人已购买)");
+        viewHolder.rebate.setText("约返现" + listMap.get(position).get("rebate") + "元");
     }
 
     static class BannerHolder extends RecyclerView.ViewHolder {
@@ -204,62 +258,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mItemClickListener = mItemClickListener;
     }
 
-    /** 将数据绑定到对应的View上 */
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        int type = getItemViewType(position);
-        switch (type) {
-            case 0:
-                onBindRecyclerHolder((RecyclerHolder) viewHolder,position);
-                break;
-//            case TYPE_BANNER:
-////                onBindBannerHolder((BannerHolder) viewHolder);
-//                break;
-//            case TYPE_GROUP:
-////                onBindGroupHolder((GroupHolder) viewHolder, getGroupPosition(position));
-//                break;
-//            case TYPE_RECYCLER:
-//                onBindRecyclerHolder((RecyclerHolder) viewHolder,position);
-//                break;
-        }
-    }
 
-    /**
-     * 将数据填充到banner上
-     * @param viewHolder
-     */
-    private void onBindBannerHolder(BannerHolder viewHolder) {
-
-    }
-
-    /**
-     * 将数据填充到recycler上
-     * @param viewHolder
-     * @param position
-     */
-    private void onBindRecyclerHolder(RecyclerHolder viewHolder, int position) {
-        int width = (int) (BaseTools.getWindowsWidth((Activity) viewHolder.itemView.getContext()) / 2);
-        width = width - (width % 10);
-        String url = listMap.get(position).get("imgUrl") + "_" + width + "x" + width + ".jpg";
-//        String url = listMap.get(position).get("imgUrl")+"";
-        Log.e("图片的地址为：", url);
-        Glide.with(viewHolder.itemView.getContext())
-                .load(url)
-                .placeholder(R.mipmap.error_z)
-                .error(R.mipmap.error_z)//加载出错的图片
-                .priority(Priority.HIGH)//优先加载
-                .diskCacheStrategy(DiskCacheStrategy.ALL)//设置缓存策略
-                .into(viewHolder.goodsImg);
-        String type = listMap.get(position).get("type") + "";
-        if(TextUtils.equals(type,"0")){
-            viewHolder.type.setText("淘宝");
-        } else {
-            viewHolder.type.setText("天猫");
-        }
-        viewHolder.title.setText("\u3000\u3000 "+listMap.get(position).get("title"));
-        viewHolder.cPrice.setText("￥" + listMap.get(position).get("cPrice") + "");
-        viewHolder.oPrice.setText(listMap.get(position).get("oPrice") + "");
-        viewHolder.bNum.setText("(" + listMap.get(position).get("bNum") + "人已购买)");
-        viewHolder.rebate.setText("约返现" + listMap.get(position).get("rebate") + "元");
-    }
 }
