@@ -279,7 +279,9 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         mPageIndex = 1;
         swipeToLoadLayout.setRefreshing(true);
         findByGoods();
-        findByBanner();
+        if(mType == 0){
+            findByBanner();
+        }
     }
 
     /**

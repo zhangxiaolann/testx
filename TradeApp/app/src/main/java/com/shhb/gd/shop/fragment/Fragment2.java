@@ -81,7 +81,7 @@ public class Fragment2 extends BaseNavPagerFragment {
     @Override
     protected Fragment getFragment(int position) {
         String cId = getCId().get(position)+","+1;
-        Log.e("cId", cId);
+        Log.e("9块9的cId", cId);
         return Fragment1_1.newInstance(cId);
     }
 }

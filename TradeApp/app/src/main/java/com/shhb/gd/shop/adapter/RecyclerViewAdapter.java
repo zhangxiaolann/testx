@@ -35,45 +35,34 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_GROUP = 1;
     /** recycler的ItemView标识 */
     private static final int TYPE_RECYCLER = 2;
-//    /** banner的数据 */
-    private List<BannerInfo> bannerInfos;
+    /** banner的数据 */
+    private final List<BannerInfo> bannerInfos;
     /** recycler的数据 */
-    private List<Map<String, Object>> listMap;
+    private final List<Map<String, Object>> listMap;
     private static OnClickListener onClickListener;
     private LoopViewPagerAdapter mPagerAdapter;
 
 
     public RecyclerViewAdapter(int type) {
-        this.mType = type;
+        mType = type;
+        listMap = new ArrayList<>();
+        bannerInfos = new ArrayList<>();
     }
 
     /** 通过异步请求将列表的数据填充到Adapter */
-    public void addRecyclerData(List<Map<String, Object>> listMap) {
-        if(null == listMap || listMap.isEmpty()){
-            return;
-        }
-        if(null == this.listMap){
-            this.listMap = new ArrayList<>();
-        }
-        this.listMap.addAll(listMap);
+    public void addRecyclerData(List<Map<String, Object>> data) {
+        listMap.clear();
+        listMap.addAll(data);
+//        notifyDataSetChanged();
     }
 
     /** 通过异步请求将Banner的数据填充到Adapter */
-    public void addBannerData(List<BannerInfo> bannerInfos) {
-        if(null == bannerInfos || bannerInfos.isEmpty()){
-            return;
-        }
-        if(null == this.bannerInfos){
-            this.bannerInfos = new ArrayList<>();
-        }
-        this.bannerInfos.addAll(bannerInfos);
+    public void addBannerData(List<BannerInfo> datas) {
+        bannerInfos.addAll(datas);
     }
 
     @Override
     public int getItemCount() {
-        if(null == this.listMap){
-            this.listMap = new ArrayList<>();
-        }
         return listMap.size();
     }
 
@@ -97,7 +86,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         int type = getItemViewType(i);
-        View itemView = null;
+        View itemView;
         switch (type){
             case TYPE_BANNER:
                 itemView = inflate(viewGroup, R.layout.banner_view);
@@ -154,14 +143,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mPagerAdapter.setList(bannerInfos);
         }
     }
-
-//    /**
-//     * 将数据填充到中间区域上
-//     * @param viewHolder
-//     */
-//    private void onBindGroupHolder(GroupHolder viewHolder) {
-//
-//    }
 
     /**
      * 将数据填充到recycler上
