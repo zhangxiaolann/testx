@@ -191,6 +191,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
      * @param json
      */
     private void updateListView(String json) {
+        Log.e("商品数据",json);
         try {
             JSONObject jsonObject = JSONObject.parseObject(json);
             int status = jsonObject.getInteger("status");
