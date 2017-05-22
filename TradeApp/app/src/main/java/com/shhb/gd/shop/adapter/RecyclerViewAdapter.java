@@ -41,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final List<Map<String, Object>> listMap;
     private static OnClickListener onClickListener;
     private LoopViewPagerAdapter mPagerAdapter;
+    private int width;
 
 
     public RecyclerViewAdapter(int type) {
@@ -49,15 +50,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         bannerInfos = new ArrayList<>();
     }
 
-    /** 通过异步请求将列表的数据填充到Adapter */
-    public void addRecyclerData(List<Map<String, Object>> data) {
-        listMap.clear();
-        listMap.addAll(data);
-//        notifyDataSetChanged();
+    /**
+     * 通过异步请求将列表的数据填充到Adapter
+     * @param datas
+     * @param mPageIndex 1是刷新
+     */
+    public void addRecyclerData(List<Map<String, Object>> datas, int mPageIndex) {
+        if(mPageIndex == 1){
+            listMap.clear();
+        }
+        listMap.addAll(datas);
+        notifyDataSetChanged();
     }
 
     /** 通过异步请求将Banner的数据填充到Adapter */
     public void addBannerData(List<BannerInfo> datas) {
+        bannerInfos.clear();
         bannerInfos.addAll(datas);
     }
 
@@ -96,6 +104,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return new GroupHolder(itemView);
             case TYPE_RECYCLER:
                 itemView = inflate(viewGroup, R.layout.recycler_item);
+                width = (BaseTools.getWindowsWidth((Activity) itemView.getContext()) / 2);
+                itemView.setLayoutParams(new LinearLayout.LayoutParams(width,LinearLayout.LayoutParams.WRAP_CONTENT));
                 return new RecyclerHolder(itemView);
         }
         throw new IllegalArgumentException("Wrong type!");
@@ -150,10 +160,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      * @param position
      */
     private void onBindRecyclerHolder(RecyclerHolder viewHolder, int position) {
-        int width = (int) (BaseTools.getWindowsWidth((Activity) viewHolder.itemView.getContext()) / 2);
+        width = (BaseTools.getWindowsWidth((Activity) viewHolder.itemView.getContext()) / 2);
         width = width - (width % 10);
         String url = listMap.get(position).get("imgUrl") + "_" + width + "x" + width + ".jpg";
-        Log.e("图片的地址为：", url);
         Glide.with(viewHolder.itemView.getContext())
                 .load(url)
                 .placeholder(R.mipmap.error_z)
@@ -236,7 +245,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     class RecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private LinearLayout goodsMain;
         private ImageView goodsImg,shareImg;
-        private RelativeLayout goodsView;
         private TextView type,title,cPrice,oPrice,bNum,rebate;
 
         /** 获取到recycler中的每一个View */
@@ -244,9 +252,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             int width = (int) (BaseTools.getWindowsWidth((Activity) itemView.getContext()) / 2);
             goodsMain = (LinearLayout) itemView.findViewById(R.id.goods_main);
-//            goodsMain.setLayoutParams(new LayoutParams(width, LayoutParams.WRAP_CONTENT));
-            goodsView = (RelativeLayout) itemView.findViewById(R.id.goods_view);
-//            goodsView.setLayoutParams(new LayoutParams(width, width));
+//            goodsMain.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
             goodsImg = (ImageView) itemView.findViewById(R.id.goods_img);
             shareImg = (ImageView) itemView.findViewById(R.id.share_img);
             type = (TextView) itemView.findViewById(R.id.goods_type);

@@ -92,7 +92,6 @@ public class LoopViewPagerAdapter extends BaseLoopPagerAdapter {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.banner_item, parent, false);
             holder = new ViewHolder();
             holder.ivBanner = (ImageView) convertView.findViewById(R.id.ivBanner);
-            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -104,7 +103,6 @@ public class LoopViewPagerAdapter extends BaseLoopPagerAdapter {
             }
         });
         BannerInfo character = bannerInfos.get(position);
-        holder.tvName.setText(character.getName().replace(" ", System.getProperty("line.separator")));
         Glide.with(parent.getContext())
                 .load(character.getAvatar())
                 .placeholder(R.mipmap.error_c)
@@ -126,6 +124,5 @@ public class LoopViewPagerAdapter extends BaseLoopPagerAdapter {
 
     public static class ViewHolder {
         ImageView ivBanner;
-        TextView tvName;
     }
 }

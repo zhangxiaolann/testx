@@ -25,7 +25,7 @@ public class BaseFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = getActivity();
-        createLoading();
+//        createLoading();
     }
 
     /**
@@ -36,52 +36,52 @@ public class BaseFragment extends Fragment {
         hud.setCancellable(true);
     }
 
-    /**
-     * 显示提示框，0显示普通的loading
-     */
-    public void showToast(int type,String content){
-        if (type == 0) {
-            hud.setLabel(content);
-            hud.show();
-        } else {
-            hud.dismiss();
-            Message message = new Message();
-            message.what = 1;
-            message.obj = content;
-            showHandler.sendMessage(message);
-        }
-    }
-
-    /**
-     * 显示1秒就消失的提示框
-     */
-    Handler showHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            String content = (String) msg.obj;
-            try {
-                if(msg.what == 1){
-                    failureHud.setLabel(content);
-                    failureHud.show();
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    };
-
-    /**
-     * 1.5秒之后关掉提示
-     */
-    public class hideThread extends Thread {
-        public void run() {
-            try {
-                sleep(1000);
-                failureHud.dismiss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    /**
+//     * 显示提示框，0显示普通的loading
+//     */
+//    public void showToast(int type,String content){
+//        if (type == 0) {
+//            hud.setLabel(content);
+//            hud.show();
+//        } else {
+//            hud.dismiss();
+//            Message message = new Message();
+//            message.what = 1;
+//            message.obj = content;
+//            showHandler.sendMessage(message);
+//        }
+//    }
+//
+//    /**
+//     * 显示1秒就消失的提示框
+//     */
+//    Handler showHandler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            String content = (String) msg.obj;
+//            try {
+//                if(msg.what == 1){
+//                    failureHud.setLabel(content);
+//                    failureHud.show();
+//                }
+//            } catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
+//    };
+//
+//    /**
+//     * 1.5秒之后关掉提示
+//     */
+//    public class hideThread extends Thread {
+//        public void run() {
+//            try {
+//                sleep(1000);
+//                failureHud.dismiss();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

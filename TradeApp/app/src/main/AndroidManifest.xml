@@ -82,6 +82,9 @@
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.RecyclerActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SetActivity"
             android:screenOrientation="portrait" />
         <activity

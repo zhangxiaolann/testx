@@ -85,7 +85,6 @@ public class WelcomeActivity extends BaseActivity {
     /** 每隔1000 毫秒执行一次*/
     private static final int delayTime = 1000;
     private boolean flag;
-    private AlphaAnimation startAnima;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +121,9 @@ public class WelcomeActivity extends BaseActivity {
             case Constants.PHONE_CODE:
                 if(permissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){//用户同意读取手机信息权限
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.SD_CODE);//SD权限
+                    findBanner();
+                    findByHomeTabs();
+                    findBy9Tabs();
                 } else {
                     showAlertDialog(requestCode);
                 }
@@ -129,9 +131,6 @@ public class WelcomeActivity extends BaseActivity {
             case Constants.SD_CODE:
                 if(permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){//用户同意SD读写权限
                     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},Constants.LOCATION_CODE);//定位权限
-                    findBanner();
-                    findByHomeTabs();
-                    findBy9Tabs();
                 } else {
                     showAlertDialog(requestCode);
                 }
@@ -296,7 +295,7 @@ public class WelcomeActivity extends BaseActivity {
                     if(getFrequency != frequency){
                         runNetMain(jsObject,imgs);
                     } else {
-                        runMain(imgs);
+                        runMain();
                     }
                 }
             } else {
@@ -383,48 +382,15 @@ public class WelcomeActivity extends BaseActivity {
 
     /**
      *  显示默认图片
-     * @param imgs
      */
-    private void runMain(List<ImageView> imgs){
+    private void runMain(){
         ImageView imageView = new ImageView(WelcomeActivity.this);
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT));
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setImageResource(R.mipmap.welcome1_1);
-        imgs.add(imageView);
-        PageAdapter pageAdapter = new PageAdapter(imgs);
-        pageView.setAdapter(pageAdapter);
-        pageView.addOnPageChangeListener(null);
-        initData();
-    }
-
-    /**
-     * 关闭启动页进入首页
-     */
-    private void initData() {
-        startAnima = new AlphaAnimation(1.0f, 0.3f);
-        startAnima.setDuration(500);
-        mViewNeedOffset.startAnimation(startAnima);
-        startAnima.setAnimationListener(new Animation.AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // TODO Auto-generated method stub
-                context.startActivity(new Intent(WelcomeActivity.this,MainActivity.class));
-                context.finish();
-            }
-        });
+        mainView.addView(imageView);
+        context.startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+        context.finish();
     }
 
     /**
@@ -566,14 +532,17 @@ public class WelcomeActivity extends BaseActivity {
         okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                json = BaseTools.decryptJson(json);
-                PrefShared.saveString(context,"homeTabJson",json);
+                try {
+                    String json = response.body().string();
+                    json = BaseTools.decryptJson(json);
+                    PrefShared.saveString(context,"homeTabJson",json);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }, parameter);
     }
@@ -596,9 +565,13 @@ public class WelcomeActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                json = BaseTools.decryptJson(json);
-                PrefShared.saveString(context,"9TabJson",json);
+                try {
+                    String json = response.body().string();
+                    json = BaseTools.decryptJson(json);
+                    PrefShared.saveString(context,"9TabJson",json);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }, parameter);
     }

@@ -142,6 +142,7 @@ public class AlibcActivity extends BaseActivity implements View.OnClickListener{
                 } else {
                     finish();
                 }
+                break;
         }
     }
 

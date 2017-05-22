@@ -3,6 +3,7 @@ package com.shhb.gd.shop.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -21,6 +23,7 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.activity.DetailsActivity;
 import com.shhb.gd.shop.activity.LoginActivity;
+import com.shhb.gd.shop.activity.RecyclerActivity;
 import com.shhb.gd.shop.adapter.RecyclerViewAdapter;
 import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.module.BannerInfo;
@@ -28,6 +31,7 @@ import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,13 +95,23 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         swipeToLoadLayout.setOnLoadMoreListener(this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.swipe_target);
-        RecyclerView.LayoutManager layoutManager;
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 2,LinearLayoutManager.VERTICAL, false);
         if(mType == 0){
-            layoutManager = new LinearLayoutManager(getContext());
-        } else {
-            layoutManager = new GridLayoutManager(getContext(), 2);
+            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+                @Override
+                public int getSpanSize(int position) {
+                    if(position == 0){
+                        return 2;
+                    } else if(position == 1){
+                        return 2;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
         }
         recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.addItemDecoration(new RecyclerViewDivider(context, LinearLayoutManager.VERTICAL, 2, ContextCompat.getColor(context, R.color.webBg)));
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickListener(this);
 
@@ -167,7 +181,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
             }
             jsonObject.put("stype", fType+"");//0 普通，1 9块9
         }
-        Log.e("传入的参数",jsonObject.toString());
+        Log.e("商品列表传入的参数",jsonObject.toString());
         String parameter = BaseTools.encodeJson(jsonObject.toString());
         okHttpUtils.postEnqueue(url, new Callback() {
             @Override
@@ -191,7 +205,6 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
      * @param json
      */
     private void updateListView(String json) {
-        Log.e("商品数据",json);
         try {
             JSONObject jsonObject = JSONObject.parseObject(json);
             int status = jsonObject.getInteger("status");
@@ -231,7 +244,13 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                     map.put("couponUrl",jsonObject.getString("url"));
                     listMap.add(map);
                 }
-                mAdapter.addRecyclerData(listMap);
+                Log.e("商品列表的数据", JSON.toJSONString(listMap));
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.addRecyclerData(listMap,mPageIndex);
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -331,18 +350,28 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
 
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()){
             case R.id.group_1_1:
                 break;
             case R.id.group_1_2:
+                intent = new Intent(context,RecyclerActivity.class);
+                intent.putExtra("type","0");
+                startActivity(intent);
                 break;
             case R.id.group_1_3:
                 break;
             case R.id.group_1_4:
                 break;
             case R.id.group_2_1:
+                intent = new Intent(context,RecyclerActivity.class);
+                intent.putExtra("type","1");
+                startActivity(intent);
                 break;
             case R.id.group_2_2:
+                intent = new Intent(context,RecyclerActivity.class);
+                intent.putExtra("type","2");
+                startActivity(intent);
                 break;
         }
     }
@@ -375,7 +404,6 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                     jsonObject.put("content","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
                     jsonObject.put("share_img",listMap.get(position).get("imgUrl")+"");
                     jsonObject.put("share_url",listMap.get(position).get("shareUrl")+"");
-                    Log.e("进入商品详情",jsonObject.toString());
                     if(null != userId && !TextUtils.equals(userId,"")){
                         if(null != nick && !TextUtils.equals(nick,"")){
                             intent = new Intent(context, DetailsActivity.class);

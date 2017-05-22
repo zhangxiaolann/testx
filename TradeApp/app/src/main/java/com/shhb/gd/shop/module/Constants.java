@@ -41,6 +41,10 @@ public class Constants {
     public static final String FIND_BY_GOODS1 = REQUEST + "GoodsShow/soldGoods";
     /** 商品详情*/
     public static final String FIND_BY_DETAILS = REQUEST + "GoodsShow/detail";
+    /** 品牌馆(上拉刷新的时候)*/
+    public static final String FIND_BY_BRAND_REFRESH = REQUEST + "GoodsShow/cateGoodsBoard";
+    /** 品牌馆(下拉加载的时候)*/
+    public static final String FIND_BY_BRAND_LOAD = REQUEST + "GoodsShow/showGoodsBoard";
     /** 商品分享成功后的请求*/
     public static final String DETAILS_SHARE = REQUEST + "GoodsShow/share";
     /** 打开QQ客服*/
