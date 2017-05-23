@@ -10,6 +10,8 @@
     <color name="gray">#4D4D4D</color>
     <color name="btn_unselect">#FE4F3E</color>
     <color name="btn_select">#FB3636</color>
+    <color name="holo_red_dark">@android:color/holo_red_dark</color>
+    <color name="holo_green_dark">@android:color/holo_green_dark</color>
     <color name="webBg">#F1F1F1</color>
     <color name="webBg_b">#768795</color>
 

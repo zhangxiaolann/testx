@@ -301,7 +301,7 @@ public class DetailsActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
             case R.id.onShare:
-                new UMShare(DetailsActivity.this,hud,failureHud,numId).share(shareTitle,shareContent,shareImg,shareUrl);
+                new UMShare(context,numId).share(shareTitle,shareContent,shareImg,shareUrl);
                 break;
             default:
                 break;

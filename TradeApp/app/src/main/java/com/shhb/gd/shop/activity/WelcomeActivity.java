@@ -15,8 +15,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +34,6 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.jaeger.library.StatusBarUtil;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.adapter.PageAdapter;
-import com.shhb.gd.shop.fragment.Fragment1_1;
 import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
@@ -45,14 +42,14 @@ import com.shhb.gd.shop.view.CustomViewPager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import me.drakeet.materialdialog.MaterialDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static com.shhb.gd.shop.module.Constants.FIND_BY_TABS_REFRESH;
 
 /**
  * Created by superMoon on 2017/5/8.
@@ -97,13 +94,11 @@ public class WelcomeActivity extends BaseActivity {
                 requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, Constants.PHONE_CODE);
             } else {
                 findBanner();
-                findByHomeTabs();
-                findBy9Tabs();
+                findByHomeOr9Tabs();
             }
         } else {
             findBanner();
-            findByHomeTabs();
-            findBy9Tabs();
+            findByHomeOr9Tabs();
         }
     }
 
@@ -122,8 +117,7 @@ public class WelcomeActivity extends BaseActivity {
                 if(permissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){//用户同意读取手机信息权限
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.SD_CODE);//SD权限
                     findBanner();
-                    findByHomeTabs();
-                    findBy9Tabs();
+                    findByHomeOr9Tabs();
                 } else {
                     showAlertDialog(requestCode);
                 }
@@ -520,61 +514,122 @@ public class WelcomeActivity extends BaseActivity {
     };
 
     /**
-     * 查询首页的选项卡数据
+     * 查询首页、9块9选项卡的数据
      */
-    private void findByHomeTabs() {
+    private void findByHomeOr9Tabs() {
+        int type[] = {1,2};
         OkHttpUtils okHttpUtils = new OkHttpUtils(20);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("cid","1");//分类
-        jsonObject.put("size", "10");//条数
-        jsonObject.put("stype", "0");//0普通，1 9块9
-        String parameter = BaseTools.encodeJson(jsonObject.toString());
-        okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
+        for(int i = 0;i < type.length;i++) {
+            if (type[i] == 1) {//首页
+                jsonObject.put("cid","1");//分类
+                jsonObject.put("size", "10");//条数
+                jsonObject.put("stype", "0");//0普通，1 9块9
+                String parameter = BaseTools.encodeJson(jsonObject.toString());
+                okHttpUtils.postEnqueue(FIND_BY_TABS_REFRESH, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String json = response.body().string();
-                    json = BaseTools.decryptJson(json);
-                    PrefShared.saveString(context,"homeTabJson",json);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            String json = response.body().string();
+                            json = BaseTools.decryptJson(json);
+                            JSONObject jsonObject = JSONObject.parseObject(json);
+                            List<String> titles = new ArrayList<>();
+                            List<String> cIds = new ArrayList<>();
+                            int status = jsonObject.getInteger("status");
+                            if (status == 1) {
+                                JSONArray tabArray = jsonObject.getJSONArray("cate");
+                                JSONObject addJson = new JSONObject();
+                                addJson.put("name","首页");
+                                addJson.put("cid","0");
+                                tabArray.add(0,addJson);
+                                for (int i = 0; i < tabArray.size(); i++) {
+                                    jsonObject = tabArray.getJSONObject(i);
+                                    titles.add(jsonObject.getString("name"));
+                                    cIds.add(jsonObject.getString("cid"));
+                                }
+                            }
+                            JSONObject jsons = new JSONObject();
+                            jsons.put("titles",titles);
+                            jsons.put("cIds",cIds);
+                            PrefShared.saveString(context,"homeTabJson",jsons.toString());
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, parameter);
+            } else {
+                jsonObject.put("cid", "1");//分类
+                jsonObject.put("size", "10");//条数
+                jsonObject.put("stype", "1");//0普通，1 9块9
+                String parameter = BaseTools.encodeJson(jsonObject.toString());
+                okHttpUtils.postEnqueue(FIND_BY_TABS_REFRESH, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            String json = response.body().string();
+                            json = BaseTools.decryptJson(json);
+                            JSONObject jsonObject = JSONObject.parseObject(json);
+                            List<String> titles = new ArrayList<>();
+                            List<String> cIds = new ArrayList<>();
+                            int status = jsonObject.getInteger("status");
+                            if (status == 1) {
+                                JSONArray tabArray = jsonObject.getJSONArray("cate");
+                                for (int i = 0; i < tabArray.size(); i++) {
+                                    jsonObject = tabArray.getJSONObject(i);
+                                    titles.add(jsonObject.getString("name"));
+                                    cIds.add(jsonObject.getString("cid"));
+                                }
+                            }
+                            JSONObject jsons = new JSONObject();
+                            jsons.put("titles",titles);
+                            jsons.put("cIds",cIds);
+                            PrefShared.saveString(context, "9TabJson", jsons.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, parameter);
             }
-        }, parameter);
+        }
     }
 
-    /**
-     * 查询9块9的选项卡数据
-     */
-    private void findBy9Tabs() {
-        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("cid","1");//分类
-        jsonObject.put("size", "10");//条数
-        jsonObject.put("stype", "1");//0普通，1 9块9
-        String parameter = BaseTools.encodeJson(jsonObject.toString());
-        okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String json = response.body().string();
-                    json = BaseTools.decryptJson(json);
-                    PrefShared.saveString(context,"9TabJson",json);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }, parameter);
-    }
+//    /**
+//     * 查询9块9的选项卡数据
+//     */
+//    private void findBy9Tabs() {
+//        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("cid","1");//分类
+//        jsonObject.put("size", "10");//条数
+//        jsonObject.put("stype", "1");//0普通，1 9块9
+//        String parameter = BaseTools.encodeJson(jsonObject.toString());
+//        okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                try {
+//                    String json = response.body().string();
+//                    json = BaseTools.decryptJson(json);
+//                    PrefShared.saveString(context,"9TabJson",json);
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, parameter);
+//    }
 
     @Override
     protected void setStatusBar() {

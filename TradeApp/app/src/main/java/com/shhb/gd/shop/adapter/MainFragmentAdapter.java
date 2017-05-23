@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /** 哪一个Fragment*/
     private final int mType;
@@ -44,7 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private int width;
 
 
-    public RecyclerViewAdapter(int type) {
+    public MainFragmentAdapter(int type) {
         mType = type;
         listMap = new ArrayList<>();
         bannerInfos = new ArrayList<>();
@@ -104,8 +103,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return new GroupHolder(itemView);
             case TYPE_RECYCLER:
                 itemView = inflate(viewGroup, R.layout.recycler_item);
-                width = (BaseTools.getWindowsWidth((Activity) itemView.getContext()) / 2);
-                itemView.setLayoutParams(new LinearLayout.LayoutParams(width,LinearLayout.LayoutParams.WRAP_CONTENT));
                 return new RecyclerHolder(itemView);
         }
         throw new IllegalArgumentException("Wrong type!");

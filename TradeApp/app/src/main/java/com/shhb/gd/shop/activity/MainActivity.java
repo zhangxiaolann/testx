@@ -1,5 +1,6 @@
 package com.shhb.gd.shop.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ali.auth.third.ui.context.CallbackContext;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -28,13 +31,25 @@ import com.shhb.gd.shop.fragment.Fragment1;
 import com.shhb.gd.shop.fragment.Fragment2;
 import com.shhb.gd.shop.fragment.Fragment3;
 import com.shhb.gd.shop.fragment.Fragment4;
+import com.shhb.gd.shop.listener.ShareOrShowBReceiver;
 import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.module.UMShare;
+import com.shhb.gd.shop.tools.BaseTools;
+import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
 import com.shhb.gd.shop.view.CustomViewPager;
 import com.umeng.socialize.UMShareAPI;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
+import static com.shhb.gd.shop.module.Constants.FIND_BY_BRAND_REFRESH;
+import static com.shhb.gd.shop.module.Constants.FIND_BY_CATEGORY_REFRESH;
 
 /**
  * Created by superMoon on 2017/4/26.
@@ -59,6 +74,7 @@ public class MainActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        findByData();
         initView();
         initBtn();
         initFragments();
@@ -78,7 +94,6 @@ public class MainActivity extends BaseActivity{
         buttonView.setScanScroll(true);
         buttonView.setOffscreenPageLimit(4);
         navigationBar = (BottomNavigationBar) findViewById(R.id.navigation_bar);
-        intiShareBReceiver();
     }
 
     /**
@@ -185,33 +200,84 @@ public class MainActivity extends BaseActivity{
         registerReceiver(shareOrShowBR, intentFilter);
     }
 
-    class ShareOrShowBReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
-                String type = intent.getAction();
-                if(TextUtils.equals(type,Constants.SENDMSG_SHARE)) {
-                    String result = intent.getStringExtra("result");
-                    Log.e("友盟分享",result);
-                    if (null != result) {
-                        String userId = PrefShared.getString(context, "userId");
-                        JSONObject jsonObject = JSONObject.parseObject(result);
-                        String numId = "", shareTitle = "", shareContent = "", shareImg = "", shareUrl = "";
-                        numId = jsonObject.getString("numId");
-                        shareTitle = jsonObject.getString("title");
-                        shareContent = jsonObject.getString("shareContent");
-                        shareImg = jsonObject.getString("shareImg");
-                        shareUrl = jsonObject.getString("shareUrl");
-//                        if (null != userId) {
-//                            shareUrl = jsonObject.getString("share_url") + "?uid=" + PrefShared.getString(context, "userId");
-//                        } else {
-//                            shareUrl = "http://a.app.qq.com/o/simple.jsp?pkgname=com.shhb.gd.shop";
-//                        }
-                        new UMShare(MainActivity.this, hud, failureHud, numId).share(shareTitle, shareContent, shareImg, shareUrl);
+    /**
+     * 查询品牌馆和领劵购的tab信息
+     */
+    private void findByData() {
+        int type[] = {1,2};
+        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
+        JSONObject jsonObject = new JSONObject();
+        for(int i = 0;i < type.length;i++){
+            if(type[i] == 1){//品牌馆
+                jsonObject.put("cname","品牌");
+                jsonObject.put("size","10");
+                String parameter = BaseTools.encodeJson(jsonObject.toString());
+                okHttpUtils.postEnqueue(FIND_BY_BRAND_REFRESH, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
                     }
-                }
-            } catch (Exception e){
-                e.printStackTrace();
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            String json = response.body().string();
+                            json = BaseTools.decryptJson(json);
+                            List<String> titles = new ArrayList<>();
+                            try {
+                                JSONObject jsonObject = JSONObject.parseObject(json);
+                                int status = jsonObject.getInteger("status");
+                                if (status == 1) {
+                                    JSONArray tabArray = jsonObject.getJSONArray("cate");
+                                    for (int i = 0; i < tabArray.size(); i++) {
+                                        titles.add(tabArray.getString(i));
+                                    }
+                                }
+                                json = JSON.toJSONString(titles);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            PrefShared.saveString(context,"brandTabJson",json);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, parameter);
+            } else {//领劵购
+                jsonObject.put("cname","全部");
+                jsonObject.put("size","10");
+                jsonObject.put("stype","0");
+                String parameter = BaseTools.encodeJson(jsonObject.toString());
+                okHttpUtils.postEnqueue(FIND_BY_CATEGORY_REFRESH, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            String json = response.body().string();
+                            json = BaseTools.decryptJson(json);
+                            List<String> titles = new ArrayList<>();
+                            try {
+                                JSONObject jsonObject = JSONObject.parseObject(json);
+                                int status = jsonObject.getInteger("status");
+                                if (status == 1) {
+                                    JSONArray tabArray = jsonObject.getJSONArray("cate");
+                                    for (int i = 0; i < tabArray.size(); i++) {
+                                        titles.add(tabArray.getString(i));
+                                    }
+                                }
+                                json = JSON.toJSONString(titles);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            PrefShared.saveString(context,"categoryTabJson",json);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, parameter);
+
             }
         }
     }
@@ -229,9 +295,15 @@ public class MainActivity extends BaseActivity{
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStart() {
+        intiShareBReceiver();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
         unregisterReceiver(shareOrShowBR);
-        super.onDestroy();
+        super.onStop();
     }
 
     private long mExitTime;

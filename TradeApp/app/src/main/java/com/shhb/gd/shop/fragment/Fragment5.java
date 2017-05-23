@@ -20,16 +20,18 @@ import java.util.List;
  * Created by superMoon on 2017/3/15.
  */
 
-public class Fragment1 extends BaseNavPagerFragment {
+public class Fragment5 extends BaseNavPagerFragment {
+    private static int mType;
 
-    public static Fragment1 newInstance() {
-        Fragment1 fragment = new Fragment1();
+    public static Fragment5 newInstance(int type) {
+        mType = type;
+        Fragment5 fragment = new Fragment5();
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment1, container, false);
+        return inflater.inflate(R.layout.fragment_base_nav_pager, container, false);
     }
 
     @Override
@@ -39,10 +41,16 @@ public class Fragment1 extends BaseNavPagerFragment {
 
     @Override
     protected List<String> getTitles() {
-        String json = PrefShared.getString(this.getContext(), "homeTabJson");
+        String json = "";
+        if(1 == mType){
+            json = PrefShared.getString(context,"brandTabJson");
+        } else {
+            json = PrefShared.getString(context,"categoryTabJson");
+        }
+        Log.e("这是"+mType+"的数据",json);
         List<String> titles = null;
         try {
-            titles = JSON.parseArray(String.valueOf(JSONObject.parseObject(json).getJSONArray("titles")),String.class);
+            titles = JSON.parseArray(json,String.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,20 +59,12 @@ public class Fragment1 extends BaseNavPagerFragment {
 
     @Override
     protected List<String> getCId() {
-        String json = PrefShared.getString(this.getContext(), "homeTabJson");
-        List<String> cIds = null;
-        try {
-            cIds = JSON.parseArray(String.valueOf(JSONObject.parseObject(json).getJSONArray("cIds")),String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return cIds;
+        return null;
     }
 
     @Override
     protected Fragment getFragment(int position) {
-        String cId = getCId().get(position) + "," + 0;
-        Log.e("首页的cId", cId);
-        return MainFragment.newInstance(cId);
+        String cName = getTitles().get(position)+","+mType;
+        return RecyclerFragment.newInstance(cName);
     }
 }

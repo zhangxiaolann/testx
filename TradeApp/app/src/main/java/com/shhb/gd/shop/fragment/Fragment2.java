@@ -1,14 +1,13 @@
 package com.shhb.gd.shop.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.shhb.gd.shop.R;
@@ -41,17 +40,9 @@ public class Fragment2 extends BaseNavPagerFragment {
     @Override
     protected List<String> getTitles() {
         String json = PrefShared.getString(this.getContext(), "9TabJson");
-        List<String> titles = new ArrayList<>();
+        List<String> titles = null;
         try {
-            JSONObject jsonObject = JSONObject.parseObject(json);
-            int status = jsonObject.getInteger("status");
-            if (status == 1) {
-                JSONArray tabArray = jsonObject.getJSONArray("cate");
-                for (int i = 0; i < tabArray.size(); i++) {
-                    jsonObject = tabArray.getJSONObject(i);
-                    titles.add(jsonObject.getString("name"));
-                }
-            }
+            titles = JSON.parseArray(String.valueOf(JSONObject.parseObject(json).getJSONArray("titles")),String.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,27 +52,19 @@ public class Fragment2 extends BaseNavPagerFragment {
     @Override
     protected List<String> getCId() {
         String json = PrefShared.getString(this.getContext(), "9TabJson");
-        List<String> cId = new ArrayList<>();
+        List<String> cIds = null;
         try {
-            JSONObject jsonObject = JSONObject.parseObject(json);
-            int status = jsonObject.getInteger("status");
-            if (status == 1) {
-                JSONArray tabArray = jsonObject.getJSONArray("cate");
-                for (int i = 0; i < tabArray.size(); i++) {
-                    jsonObject = tabArray.getJSONObject(i);
-                    cId.add(jsonObject.getString("cid"));
-                }
-            }
+            cIds = JSON.parseArray(String.valueOf(JSONObject.parseObject(json).getJSONArray("cIds")),String.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return cId;
+        return cIds;
     }
 
     @Override
     protected Fragment getFragment(int position) {
-        String cId = getCId().get(position)+","+1;
+        String cId = getCId().get(position) + "," + 1;
         Log.e("9块9的cId", cId);
-        return Fragment1_1.newInstance(cId);
+        return MainFragment.newInstance(cId);
     }
 }

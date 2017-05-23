@@ -33,18 +33,24 @@ public class Constants {
     public static final String FIND_BY_IMG = REQUEST + "index/opening";
     /** 查找首页的banner图片*/
     public static final String FIND_BY_BANNER = REQUEST + "index/banners";
-    /** 查找选项卡和对应的内容(上拉刷新的时候)*/
+    /** 查找选项卡和对应的内容(下拉刷新的时候)*/
     public static final String FIND_BY_TABS_REFRESH = REQUEST + "GoodsShow/cateGoods";
-    /** 查找选项卡和对应的内容(下拉加载的时候)*/
+    /** 查找选项卡和对应的内容(上拉加载的时候)*/
     public static final String FIND_BY_TABS_LOAD = REQUEST + "GoodsShow/showGoods";
     /** 首页商品*/
     public static final String FIND_BY_GOODS1 = REQUEST + "GoodsShow/soldGoods";
     /** 商品详情*/
     public static final String FIND_BY_DETAILS = REQUEST + "GoodsShow/detail";
-    /** 品牌馆(上拉刷新的时候)*/
+    /** 品牌馆(下拉刷新的时候)*/
     public static final String FIND_BY_BRAND_REFRESH = REQUEST + "GoodsShow/cateGoodsBoard";
-    /** 品牌馆(下拉加载的时候)*/
+    /** 品牌馆(上拉加载的时候)*/
     public static final String FIND_BY_BRAND_LOAD = REQUEST + "GoodsShow/showGoodsBoard";
+    /** 新品特惠*/
+    public static final String FIND_BY_NEW_REFRESH = REQUEST + "GoodsShow/newGoods";
+    /** 领卷购(下拉刷新的时候)*/
+    public static final String FIND_BY_CATEGORY_REFRESH = REQUEST + "GoodsShow/cateGoodsEx";
+    /** 领卷购(上拉加载的时候)*/
+    public static final String FIND_BY_CATEGORY_LOAD = REQUEST + "GoodsShow/showGoodsEx";
     /** 商品分享成功后的请求*/
     public static final String DETAILS_SHARE = REQUEST + "GoodsShow/share";
     /** 打开QQ客服*/

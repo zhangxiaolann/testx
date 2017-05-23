@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 
-    <include
-        layout="@layout/fragment_base_nav_pager"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
+    <com.shhb.gd.shop.view.CustomViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

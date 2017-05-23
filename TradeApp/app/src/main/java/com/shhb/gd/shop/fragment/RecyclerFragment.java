@@ -3,7 +3,6 @@ package com.shhb.gd.shop.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,15 +22,12 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.activity.DetailsActivity;
 import com.shhb.gd.shop.activity.LoginActivity;
-import com.shhb.gd.shop.activity.RecyclerActivity;
-import com.shhb.gd.shop.adapter.RecyclerViewAdapter;
+import com.shhb.gd.shop.adapter.RecyclerFragmentAdapter;
 import com.shhb.gd.shop.module.AlibcUser;
-import com.shhb.gd.shop.module.BannerInfo;
 import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,14 +43,14 @@ import okhttp3.Response;
  * Created by superMoon on 2017/3/15.
  */
 
-public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLoadMoreListener, RecyclerViewAdapter.OnClickListener{
-    /** 1代表首页，2代表9块9 */
+public class RecyclerFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener,RecyclerFragmentAdapter.OnClickListener {
+    /** 1代表品牌馆，2代表领劵购*/
     private int fType;
-    /** cId */
-    private int mType;
+    /** cName*/
+    private String mType;
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter mAdapter;
+    private RecyclerFragmentAdapter mAdapter;
     /**
      * 请求页码
      */
@@ -64,8 +60,8 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
      */
     private final static int pageNum = 10;
 
-    public static Fragment1_1 newInstance(String type) {
-        Fragment1_1 fragment = new Fragment1_1();
+    public static RecyclerFragment newInstance(String type) {
+        RecyclerFragment fragment = new RecyclerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("LAYOUT_MANAGER_TYPE",type);
         fragment.setArguments(bundle);
@@ -77,9 +73,9 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         super.onCreate(savedInstanceState);
         String result = getArguments().getString("LAYOUT_MANAGER_TYPE");
         String str[] = result.split(",");
-        mType = Integer.parseInt(str[0]);
+        mType = str[0];
         fType = Integer.parseInt(str[1]);
-        mAdapter = new RecyclerViewAdapter(mType);
+        mAdapter = new RecyclerFragmentAdapter(fType);
     }
 
     @Override
@@ -95,21 +91,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         swipeToLoadLayout.setOnLoadMoreListener(this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.swipe_target);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 2,LinearLayoutManager.VERTICAL, false);
-        if(mType == 0){
-            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
-                @Override
-                public int getSpanSize(int position) {
-                    if(position == 0){
-                        return 2;
-                    } else if(position == 1){
-                        return 2;
-                    } else {
-                        return 1;
-                    }
-                }
-            });
-        }
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 2, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.addItemDecoration(new RecyclerViewDivider(context, LinearLayoutManager.VERTICAL, 2, ContextCompat.getColor(context, R.color.webBg)));
         recyclerView.setAdapter(mAdapter);
@@ -160,28 +142,29 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
         if(null == userId){
             userId = "0";
         }
-        if(mType == 0){//首页
-            url = Constants.FIND_BY_GOODS1;
+        if(mPageIndex == 1){//刷新
+            if(fType == 1){
+                url = Constants.FIND_BY_BRAND_REFRESH;
+                jsonObject.put("cname","品牌");
+            } else {
+                url = Constants.FIND_BY_CATEGORY_REFRESH;
+                jsonObject.put("cname","全部");
+                jsonObject.put("stype","0");
+            }
+            jsonObject.put("size","10");
+        } else {//加载
+            if(fType == 1){
+                url = Constants.FIND_BY_BRAND_LOAD;
+            } else {
+                url = Constants.FIND_BY_CATEGORY_LOAD;
+                jsonObject.put("stype", "0");
+            }
+            jsonObject.put("cname",mType);//当前的cName
             jsonObject.put("page_no", mPageIndex+"");//第几页
             jsonObject.put("page_size", pageNum+"");//每个分类条数
             jsonObject.put("system","1");//0iOS 1android
             jsonObject.put("user_id", userId);//用户uid
-        } else {//非首页
-            if(mPageIndex == 1){//刷新
-                url = Constants.FIND_BY_TABS_REFRESH;
-                jsonObject.put("cid","1");//暂时是固定的传值
-                jsonObject.put("size", "10");//每个分类条数
-            } else {//加载
-                url = Constants.FIND_BY_TABS_LOAD;
-                jsonObject.put("cid",mType+"");//当前的cId
-                jsonObject.put("page_no", mPageIndex+"");//第几页
-                jsonObject.put("page_size", pageNum+"");//每个分类条数
-                jsonObject.put("system","1");//0iOS 1android
-                jsonObject.put("user_id", userId);//用户uid
-            }
-            jsonObject.put("stype", fType+"");//0 普通，1 9块9
         }
-        Log.e("商品列表传入的参数",jsonObject.toString());
         String parameter = BaseTools.encodeJson(jsonObject.toString());
         okHttpUtils.postEnqueue(url, new Callback() {
             @Override
@@ -211,23 +194,11 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
             if (status == 1) {
                 final List<Map<String, Object>> listMap = new ArrayList<>();
                 JSONArray jsonArray = null;
-                if(mType == 0){//首页
+                if(mPageIndex == 1) {//刷新
+                    jsonObject = jsonObject.getJSONObject("data");
+                    jsonArray = jsonObject.getJSONArray(mType);
+                } else {//加载
                     jsonArray = jsonObject.getJSONArray("data");
-                } else {//非首页
-                    if(mPageIndex == 1) {//刷新
-                        jsonObject = jsonObject.getJSONObject("data");
-                        Log.e("选项卡对象",jsonObject.toString());
-                        Log.e("选项卡类型",mType+"");
-                        try {
-                            jsonArray = jsonObject.getJSONArray(mType+"");
-                            Log.e("选项卡数组",jsonArray.toString());
-                        } catch (Exception e){
-                            Log.e("选项卡数组","解析出错");
-                            e.printStackTrace();
-                        }
-                    } else {//加载
-                        jsonArray = jsonObject.getJSONArray("data");
-                    }
                 }
                 for (int i = 0; i < jsonArray.size(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
@@ -239,6 +210,7 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                     map.put("oPrice", jsonObject.getString("price"));
                     map.put("bNum", jsonObject.getString("volume"));
                     map.put("rebate", jsonObject.getString("rating"));
+                    map.put("reduce", jsonObject.getString("reduce"));
                     map.put("numId", jsonObject.getString("num_iid"));
                     map.put("shareUrl", jsonObject.getString("share_url"));
                     map.put("couponUrl",jsonObject.getString("url"));
@@ -258,50 +230,12 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
     }
 
     /**
-     * 查询banner信息
-     */
-    private void findByBanner(){
-        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
-        okHttpUtils.postEnqueue(Constants.FIND_BY_BANNER, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                try {
-                    JSONObject jsonObject = JSONObject.parseObject(json);
-                    int status = jsonObject.getInteger("status");
-                    if(1 == status){
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        final List<BannerInfo> bannerList = new ArrayList<>();
-                        for(int i = 0;i < jsonArray.size();i++){
-                            jsonObject = jsonArray.getJSONObject(i);
-                            BannerInfo banner = new BannerInfo();
-                            banner.setAvatar(jsonObject.getString("icon_url"));
-                            banner.setName("第"+(i+1)+"张图");
-                            bannerList.add(banner);
-                        }
-                        mAdapter.addBannerData(bannerList);
-                    }
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }, "");
-    }
-
-    /**
      * 下拉更新广告列表
      */
     private void refreshRequestList() {
         mPageIndex = 1;
         swipeToLoadLayout.setRefreshing(true);
         findByGoods();
-        if(mType == 0){
-            findByBanner();
-        }
     }
 
     /**
@@ -321,12 +255,6 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
     @Override
     public void onLoadMore() {
         loadRequestList();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeToLoadLayout.setLoadingMore(false);
-//            }
-//        }, 2000);
     }
 
     private void closeLoading() {
@@ -349,63 +277,35 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
     }
 
     @Override
-    public void onClick(View view) {
-        Intent intent;
-        switch (view.getId()){
-            case R.id.group_1_1:
-                break;
-            case R.id.group_1_2:
-                intent = new Intent(context,RecyclerActivity.class);
-                intent.putExtra("type","0");
-                startActivity(intent);
-                break;
-            case R.id.group_1_3:
-                break;
-            case R.id.group_1_4:
-                break;
-            case R.id.group_2_1:
-                intent = new Intent(context,RecyclerActivity.class);
-                intent.putExtra("type","1");
-                startActivity(intent);
-                break;
-            case R.id.group_2_2:
-                intent = new Intent(context,RecyclerActivity.class);
-                intent.putExtra("type","2");
-                startActivity(intent);
-                break;
-        }
-    }
-
-    @Override
     public void onClick(View view, int position, List<Map<String, Object>> listMap) {
         Intent intent;
         JSONObject jsonObject;
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.share_img:
                 jsonObject = new JSONObject();
-                jsonObject.put("numId",listMap.get(position).get("numId")+"");
-                jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
-                jsonObject.put("shareContent","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
-                jsonObject.put("shareImg",listMap.get(position).get("imgUrl")+"");
-                jsonObject.put("shareUrl",listMap.get(position).get("shareUrl")+"");
+                jsonObject.put("numId", listMap.get(position).get("numId") + "");
+                jsonObject.put("title", "惠淘分享，" + listMap.get(position).get("title") + "");
+                jsonObject.put("shareContent", "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+                jsonObject.put("shareImg", listMap.get(position).get("imgUrl") + "");
+                jsonObject.put("shareUrl", listMap.get(position).get("shareUrl") + "");
                 intent = new Intent(Constants.SENDMSG_SHARE);
-                intent.putExtra("result",jsonObject.toString());
+                intent.putExtra("result", jsonObject.toString());
                 context.sendBroadcast(intent);
                 break;
             default:
-                String userId = PrefShared.getString(context,"userId");
-                String nick = PrefShared.getString(context,"nick");
+                String userId = PrefShared.getString(context, "userId");
+                String nick = PrefShared.getString(context, "nick");
                 try {
                     jsonObject = new JSONObject();
-                    jsonObject.put("store_type",listMap.get(position).get("type")+"");
-                    jsonObject.put("goods_id",listMap.get(position).get("numId")+"");
-                    jsonObject.put("vocher_url",listMap.get(position).get("couponUrl")+"");
-                    jsonObject.put("title","惠淘分享，"+listMap.get(position).get("title")+"");
-                    jsonObject.put("content","超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
-                    jsonObject.put("share_img",listMap.get(position).get("imgUrl")+"");
-                    jsonObject.put("share_url",listMap.get(position).get("shareUrl")+"");
-                    if(null != userId && !TextUtils.equals(userId,"")){
-                        if(null != nick && !TextUtils.equals(nick,"")){
+                    jsonObject.put("store_type", listMap.get(position).get("type") + "");
+                    jsonObject.put("goods_id", listMap.get(position).get("numId") + "");
+                    jsonObject.put("vocher_url", listMap.get(position).get("couponUrl") + "");
+                    jsonObject.put("title", "惠淘分享，" + listMap.get(position).get("title") + "");
+                    jsonObject.put("content", "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+                    jsonObject.put("share_img", listMap.get(position).get("imgUrl") + "");
+                    jsonObject.put("share_url", listMap.get(position).get("shareUrl") + "");
+                    if (null != userId && !TextUtils.equals(userId, "")) {
+                        if (null != nick && !TextUtils.equals(nick, "")) {
                             intent = new Intent(context, DetailsActivity.class);
                             intent.putExtra("result", jsonObject.toString());
                             context.startActivity(intent);
@@ -416,10 +316,11 @@ public class Fragment1_1 extends BaseFragment implements OnRefreshListener, OnLo
                         intent = new Intent(context, LoginActivity.class);
                         context.startActivity(intent);
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
         }
     }
+
 }

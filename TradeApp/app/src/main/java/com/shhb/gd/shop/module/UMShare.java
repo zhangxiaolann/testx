@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -33,16 +34,17 @@ import okhttp3.Response;
 public class UMShare implements UMShareListener {
 
     private Activity context;
-    private KProgressHUD failureHud;
-    private KProgressHUD hud;
+    private static KProgressHUD hud;
+    private static KProgressHUD failureHud;
     private String numId;
     private String type;
 
-    public UMShare(Activity context, KProgressHUD hud, KProgressHUD failureHud, String numId){
+    public UMShare(Activity context, String numId){
         this.context = context;
-        this.hud = hud;
-        this.failureHud = failureHud;
         this.numId = numId;
+        hud = KProgressHUD.create(context);
+        failureHud = KProgressHUD.create(context);
+        failureHud.setCustomView(new ImageView(context));
     }
 
     public void share(String title,String content,String imgUrl,String shareUrl){
