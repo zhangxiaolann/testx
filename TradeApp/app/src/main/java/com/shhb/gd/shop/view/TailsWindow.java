@@ -107,7 +107,6 @@ public class TailsWindow extends PopupWindow {
                     content2.setVisibility(View.VISIBLE);//隐藏小字
                     content1.setText("立即领劵");//设置文字
                 }
-//                BaseTools.setBackgroundAlpha(context,1.0f);
             }
         });
     }
@@ -122,6 +121,7 @@ public class TailsWindow extends PopupWindow {
                     String wholeJS = "(function(_time,_url){" +
                             "setTimeout(function(){" +
                             "var msg = document.getElementById('J-msg').innerText;" +
+                            "alert(msg+'董小姐')" +
                             "window.native_android.coupon_msg(JSON.stringify({msg:msg,url:_url}));" +
                             "},_time);" +
                             "})(4500," + "\"" + numId + "\"" + ");";

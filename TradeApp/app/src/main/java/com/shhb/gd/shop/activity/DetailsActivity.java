@@ -212,7 +212,7 @@ public class DetailsActivity extends BaseActivity implements View.OnClickListene
                         tailContent1,
                         tailContent2);
                 bottomAll.setVisibility(View.VISIBLE);
-                webView.post(new Runnable() {
+                bottomAll.post(new Runnable() {
                     @Override
                     public void run() {
                         showPopupWindow();
@@ -232,8 +232,6 @@ public class DetailsActivity extends BaseActivity implements View.OnClickListene
     private void showPopupWindow() {
         // 显示窗口
         tailsWindow.showAtLocation(webView, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, (int) BaseTools.dpChangePx(context,50));
-        // 打开窗口时设置背景颜色变暗
-//        BaseTools.setBackgroundAlpha(this,0.5f);
     }
 
     /**
