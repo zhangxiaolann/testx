@@ -64,6 +64,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
      * 每页请求数量
      */
     private final static int pageNum = 10;
+    private int i = 1;
 
     public static MainFragment newInstance(String type) {
         MainFragment fragment = new MainFragment();
@@ -142,12 +143,15 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);//注册EventBus
-//        swipeToLoadLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeToLoadLayout.setRefreshing(true);
-//            }
-//        });
+        if(i == 1){
+            swipeToLoadLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeToLoadLayout.setRefreshing(true);
+                    i = 2;
+                }
+            });
+        }
     }
 
     @Override

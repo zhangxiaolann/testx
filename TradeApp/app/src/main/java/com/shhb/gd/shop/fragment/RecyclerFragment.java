@@ -63,6 +63,7 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
      * 每页请求数量
      */
     private final static int pageNum = 10;
+    private int i = 1;
 
     public static RecyclerFragment newInstance(String type) {
         RecyclerFragment fragment = new RecyclerFragment();
@@ -132,12 +133,15 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);//注册EventBus
-//        swipeToLoadLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeToLoadLayout.setRefreshing(true);
-//            }
-//        });
+        if(i == 1){
+            swipeToLoadLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeToLoadLayout.setRefreshing(true);
+                    i = 2;
+                }
+            });
+        }
     }
 
     @Override
