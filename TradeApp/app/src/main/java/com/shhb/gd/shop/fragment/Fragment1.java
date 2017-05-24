@@ -19,6 +19,8 @@ import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.tools.PrefShared;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 /**
@@ -101,6 +103,7 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
     protected Fragment getFragment(int position) {
         String cId = getCId().get(position) + "," + 0;
         Log.e("首页的cId", cId);
+        EventBus.getDefault().post(position+"");
         return MainFragment.newInstance(cId);
     }
 

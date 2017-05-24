@@ -127,7 +127,6 @@ public class MainActivity extends BaseActivity{
         @Override
         public void onTabSelected(int position) {//未选中 -> 选中
             buttonView.setCurrentItem(position,isAnimation);
-            EventBus.getDefault().post(position+"");
         }
 
         @Override
