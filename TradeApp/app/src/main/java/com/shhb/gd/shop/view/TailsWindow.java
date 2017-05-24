@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class TailsWindow extends PopupWindow {
      * 显示优惠券的WebView
      */
     public WebView webView;
+    private ProgressBar schedule;
     private View viewmenu;
     private TWClient twClient;
     private String numId;
@@ -49,8 +51,11 @@ public class TailsWindow extends PopupWindow {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         viewmenu = inflater.inflate(R.layout.web_activity, null);
         fatherView = (RelativeLayout) viewmenu.findViewById(R.id.fatherView);
+        schedule = (ProgressBar) viewmenu.findViewById(R.id.schedule);
+        schedule.setVisibility(View.VISIBLE);
         webView = new WebView(context);
         RelativeLayout.LayoutParams webParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        webParams.addRule(RelativeLayout.BELOW,R.id.schedule);
         webView.setLayoutParams(webParams);
         fatherView.addView(webView);
 
@@ -115,13 +120,14 @@ public class TailsWindow extends PopupWindow {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
-            if (newProgress >= 100) {
+            schedule.setProgress(newProgress);
+            if (newProgress == 100) {
+                schedule.setVisibility(View.GONE);
                 if (!TextUtils.equals(numId, "")) {
                     String js = "alert(window.native_android.coupon_msg ? 'y' : 'n');";
                     String wholeJS = "(function(_time,_url){" +
                             "setTimeout(function(){" +
                             "var msg = document.getElementById('J-msg').innerText;" +
-                            "alert(msg+'董小姐')" +
                             "window.native_android.coupon_msg(JSON.stringify({msg:msg,url:_url}));" +
                             "},_time);" +
                             "})(4500," + "\"" + numId + "\"" + ");";
