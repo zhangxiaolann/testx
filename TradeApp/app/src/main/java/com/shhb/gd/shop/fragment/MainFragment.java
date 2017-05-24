@@ -355,9 +355,9 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
             case R.id.group_1_4:
                 break;
             case R.id.group_2_1:
-//                intent = new Intent(context,RecyclerActivity.class);
-//                intent.putExtra("type","1");
-//                startActivity(intent);
+                intent = new Intent(context,RecyclerActivity.class);
+                intent.putExtra("type","3");
+                startActivity(intent);
                 break;
             case R.id.group_2_2:
                 intent = new Intent(context,RecyclerActivity.class);

@@ -44,7 +44,7 @@ import okhttp3.Response;
  */
 
 public class RecyclerFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener,RecyclerFragmentAdapter.OnClickListener {
-    /** 1代表品牌馆，2代表领劵购*/
+    /** 1代表品牌馆，2代表领劵购，3代表新品特惠*/
     private int fType;
     /** cName*/
     private String mType;
@@ -72,10 +72,15 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String result = getArguments().getString("LAYOUT_MANAGER_TYPE");
-        String str[] = result.split(",");
-        mType = str[0];
-        fType = Integer.parseInt(str[1]);
-        mAdapter = new RecyclerFragmentAdapter(fType);
+        if(result.contains(",")){
+            String str[] = result.split(",");
+            mType = str[0];
+            fType = Integer.parseInt(str[1]);
+            mAdapter = new RecyclerFragmentAdapter(fType);
+        } else {
+            fType = Integer.parseInt(result);
+            mAdapter = new RecyclerFragmentAdapter(fType);
+        }
     }
 
     @Override
@@ -142,28 +147,36 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
         if(null == userId){
             userId = "0";
         }
-        if(mPageIndex == 1){//刷新
-            if(fType == 1){
-                url = Constants.FIND_BY_BRAND_REFRESH;
-                jsonObject.put("cname","品牌");
-            } else {
-                url = Constants.FIND_BY_CATEGORY_REFRESH;
-                jsonObject.put("cname","全部");
-                jsonObject.put("stype","0");
-            }
-            jsonObject.put("size","10");
-        } else {//加载
-            if(fType == 1){
-                url = Constants.FIND_BY_BRAND_LOAD;
-            } else {
-                url = Constants.FIND_BY_CATEGORY_LOAD;
-                jsonObject.put("stype", "0");
-            }
-            jsonObject.put("cname",mType);//当前的cName
+        if(fType == 3){
+            url = Constants.FIND_BY_NEW_REFRESH;
             jsonObject.put("page_no", mPageIndex+"");//第几页
             jsonObject.put("page_size", pageNum+"");//每个分类条数
             jsonObject.put("system","1");//0iOS 1android
             jsonObject.put("user_id", userId);//用户uid
+        } else {
+            if(mPageIndex == 1){//刷新
+                if(fType == 1){
+                    url = Constants.FIND_BY_BRAND_REFRESH;
+                    jsonObject.put("cname","品牌");
+                } else {
+                    url = Constants.FIND_BY_CATEGORY_REFRESH;
+                    jsonObject.put("cname","全部");
+                    jsonObject.put("stype","0");
+                }
+                jsonObject.put("size","10");
+            } else {//加载
+                if(fType == 1){
+                    url = Constants.FIND_BY_BRAND_LOAD;
+                } else {
+                    url = Constants.FIND_BY_CATEGORY_LOAD;
+                    jsonObject.put("stype", "0");
+                }
+                jsonObject.put("cname",mType);//当前的cName
+                jsonObject.put("page_no", mPageIndex+"");//第几页
+                jsonObject.put("page_size", pageNum+"");//每个分类条数
+                jsonObject.put("system","1");//0iOS 1android
+                jsonObject.put("user_id", userId);//用户uid
+            }
         }
         String parameter = BaseTools.encodeJson(jsonObject.toString());
         okHttpUtils.postEnqueue(url, new Callback() {
@@ -194,10 +207,14 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
             if (status == 1) {
                 final List<Map<String, Object>> listMap = new ArrayList<>();
                 JSONArray jsonArray = null;
-                if(mPageIndex == 1) {//刷新
-                    jsonObject = jsonObject.getJSONObject("data");
-                    jsonArray = jsonObject.getJSONArray(mType);
-                } else {//加载
+                if(fType != 3){
+                    if(mPageIndex == 1) {//刷新
+                        jsonObject = jsonObject.getJSONObject("data");
+                        jsonArray = jsonObject.getJSONArray(mType);
+                    } else {//加载
+                        jsonArray = jsonObject.getJSONArray("data");
+                    }
+                } else {
                     jsonArray = jsonObject.getJSONArray("data");
                 }
                 for (int i = 0; i < jsonArray.size(); i++) {

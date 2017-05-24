@@ -99,7 +99,7 @@ public class RecyclerFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
         viewHolder.cPrice.setText("￥" + listMap.get(position).get("cPrice") + "");
         viewHolder.oPrice.setText(listMap.get(position).get("oPrice") + "");
         viewHolder.bNum.setText("(" + listMap.get(position).get("bNum") + "人已购买)");
-        if(fType == 1){
+        if(fType == 1 || fType == 3){
             viewHolder.rebate.setText("约返现" + listMap.get(position).get("rebate") + "元");
         } else {
             viewHolder.rebate.setText(listMap.get(position).get("reduce") + "元优惠券");
@@ -126,7 +126,7 @@ public class RecyclerFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
             oPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
             bNum = (TextView) itemView.findViewById(R.id.bNum);
             rebate = (TextView) itemView.findViewById(R.id.rebate);
-            if(fType == 1){
+            if(fType == 1 || fType == 3){
                 rebate.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.holo_green_dark));
             } else {
                 rebate.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.holo_red_dark));
