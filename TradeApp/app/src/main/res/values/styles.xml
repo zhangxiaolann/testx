@@ -27,14 +27,6 @@
         <item name="android:windowExitAnimation">@anim/push_top_out</item>
     </style>
 
-    <style name="progressbar_style">
-        <item name="android:maxWidth">20.0dip</item>
-        <item name="android:maxHeight">20.0dip</item>
-        <item name="android:indeterminateDrawable">@anim/anim_loading</item>
-        <item name="android:minWidth">20.0dip</item>
-        <item name="android:minHeight">20.0dip</item>
-    </style>
-
     <style name="TabLayoutTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
         <item name="android:textSize">@dimen/text_16_sp</item>
     </style>

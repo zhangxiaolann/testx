@@ -5,23 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/webBg"
-    app:default_to_loading_more_scrolling_duration="500"
+    app:swipe_style="classic">
+
+    <include
+        android:id="@+id/swipe_refresh_header"
+        layout="@layout/layout_twitter_header" />
+    <!--app:default_to_loading_more_scrolling_duration="500"
     app:default_to_refreshing_scrolling_duration="1000"
     app:load_more_complete_delay_duration="0"
     app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
     app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
     app:refresh_complete_delay_duration="0"
     app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
-    app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
-    app:swipe_style="above">
-
+    app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"-->
     <!--<include
         android:id="@+id/swipe_refresh_header"
-        layout="@layout/layout_twitter_header" />-->
-
-    <include
-        android:id="@+id/swipe_refresh_header"
-        layout="@layout/layout_google_hook_header" />
+        layout="@layout/layout_google_hook_header" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/swipe_target"
@@ -29,12 +28,12 @@
         android:layout_height="match_parent"
         android:clipToPadding="false" />
 
-    <include
-        android:id="@+id/swipe_load_more_footer"
-        layout="@layout/layout_google_hook_footer" />
-
     <!--<include
         android:id="@+id/swipe_load_more_footer"
-        layout="@layout/layout_classic_footer" />-->
+        layout="@layout/layout_google_hook_footer" />-->
+
+    <include
+        android:id="@+id/swipe_load_more_footer"
+        layout="@layout/layout_classic_footer" />
 
 </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
