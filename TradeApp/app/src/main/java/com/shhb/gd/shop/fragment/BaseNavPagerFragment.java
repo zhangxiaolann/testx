@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.view.CustomViewPager;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +26,7 @@ public abstract class BaseNavPagerFragment extends BaseFragment {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private Adapter mAdapter;
-
-    public BaseNavPagerFragment() {
-        // Required empty public constructor
-    }
+    private List<String> titles;
 
     protected abstract List<String> getTitles();
 
@@ -39,7 +38,7 @@ public abstract class BaseNavPagerFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new Adapter(getChildFragmentManager());
-        List<String> titles = getTitles();
+        titles = getTitles();
         for (int i = 0; i < titles.size(); i++) {
             mAdapter.addFragment(getFragment(i), titles.get(i));
         }

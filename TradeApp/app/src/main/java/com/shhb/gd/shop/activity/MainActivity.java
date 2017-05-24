@@ -1,15 +1,10 @@
 package com.shhb.gd.shop.activity;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,12 +28,13 @@ import com.shhb.gd.shop.fragment.Fragment3;
 import com.shhb.gd.shop.fragment.Fragment4;
 import com.shhb.gd.shop.listener.ShareOrShowBReceiver;
 import com.shhb.gd.shop.module.Constants;
-import com.shhb.gd.shop.module.UMShare;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
 import com.shhb.gd.shop.view.CustomViewPager;
 import com.umeng.socialize.UMShareAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -131,6 +127,7 @@ public class MainActivity extends BaseActivity{
         @Override
         public void onTabSelected(int position) {//未选中 -> 选中
             buttonView.setCurrentItem(position,isAnimation);
+            EventBus.getDefault().post(position+"");
         }
 
         @Override

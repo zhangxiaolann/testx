@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.activity.AlibcActivity;
@@ -20,7 +19,6 @@ import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.tools.PrefShared;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

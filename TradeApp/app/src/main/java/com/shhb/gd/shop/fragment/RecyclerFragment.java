@@ -29,6 +29,10 @@ import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,9 +118,8 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
         });
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String type){
         swipeToLoadLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -126,14 +129,22 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        EventBus.getDefault().register(this);//注册EventBus
+//        swipeToLoadLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                swipeToLoadLayout.setRefreshing(true);
+//            }
+//        });
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
-        if (swipeToLoadLayout.isRefreshing()) {
-            swipeToLoadLayout.setRefreshing(false);
-        }
-        if (swipeToLoadLayout.isLoadingMore()) {
-            swipeToLoadLayout.setLoadingMore(false);
-        }
+        EventBus.getDefault().unregister(this);//取消注册
+        closeLoading();
     }
 
     /**
