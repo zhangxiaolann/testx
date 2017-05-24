@@ -103,7 +103,6 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
     protected Fragment getFragment(int position) {
         String cId = getCId().get(position) + "," + 0;
         Log.e("首页的cId", cId);
-        EventBus.getDefault().post(position+"");
         return MainFragment.newInstance(cId);
     }
 
