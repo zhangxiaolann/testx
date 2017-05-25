@@ -29,10 +29,6 @@ import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,18 +115,6 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(String type){
-        if(TextUtils.equals(type,"1")){
-            swipeToLoadLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeToLoadLayout.setRefreshing(true);
-                }
-            });
-        }
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -146,15 +130,8 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);//注册EventBus
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);//取消注册
         closeLoading();
     }
 
