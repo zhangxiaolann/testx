@@ -121,12 +121,14 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String type){
-        swipeToLoadLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(true);
-            }
-        });
+        if(TextUtils.equals(type,"1")){
+            swipeToLoadLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeToLoadLayout.setRefreshing(true);
+                }
+            });
+        }
     }
 
     @Override

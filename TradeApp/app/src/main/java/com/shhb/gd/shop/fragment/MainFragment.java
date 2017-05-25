@@ -131,12 +131,14 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String type){
-        swipeToLoadLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(true);
-            }
-        });
+        if(TextUtils.equals(type,"0")){
+            swipeToLoadLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeToLoadLayout.setRefreshing(true);
+                }
+            });
+        }
     }
 
     @Override

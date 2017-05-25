@@ -91,7 +91,6 @@ public class TwitterRefreshHeaderView extends SwipeRefreshHeaderLayout {
                     ivArrow.startAnimation(rotateDown);
                     rotated = false;
                 }
-
                 tvRefresh.setText("下拉可以刷新");
             }
         }

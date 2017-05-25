@@ -52,7 +52,7 @@ import static com.shhb.gd.shop.module.Constants.FIND_BY_CATEGORY_REFRESH;
  */
 
 public class MainActivity extends BaseActivity{
-
+    private long mExitTime;
     private View mViewNeedOffset;
     private RelativeLayout mainView;
     /** 底部按钮的ViewPager */
@@ -131,12 +131,19 @@ public class MainActivity extends BaseActivity{
 
         @Override
         public void onTabUnselected(int position) {//选中 -> 未选中
-
         }
 
         @Override
         public void onTabReselected(int position) {//选中 -> 选中
-
+            int yqPostion = PrefShared.getInt(context,"toPostion");
+            if(yqPostion == position){
+                if ((System.currentTimeMillis() - mExitTime) > 1000) {
+                    mExitTime = System.currentTimeMillis();
+                } else {
+                    EventBus.getDefault().post(position+"");
+                }
+            }
+            PrefShared.saveInt(context,"toPostion",position);
         }
     };
 
@@ -302,7 +309,6 @@ public class MainActivity extends BaseActivity{
         super.onStop();
     }
 
-    private long mExitTime;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
