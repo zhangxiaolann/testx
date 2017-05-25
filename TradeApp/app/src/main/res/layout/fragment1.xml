@@ -10,7 +10,7 @@
         android:id="@+id/margin_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="21.5dp"
         android:gravity="center">
 
         <ImageView
