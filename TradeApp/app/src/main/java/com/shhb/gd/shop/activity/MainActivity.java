@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity{
                 if ((System.currentTimeMillis() - mExitTime) > 1000) {
                     mExitTime = System.currentTimeMillis();
                 } else {
-                    EventBus.getDefault().post(position+"");
+                    EventBus.getDefault().post(position);
                 }
             }
             PrefShared.saveInt(context,"toPostion",position);
