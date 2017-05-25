@@ -102,9 +102,9 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
                 @Override
                 public int getSpanSize(int position) {
-                    if(position == 0){
+                    if (position == 0) {
                         return 2;
-                    } else if(position == 1){
+                    } else if (position == 1) {
                         return 2;
                     } else {
                         return 1;
@@ -130,7 +130,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(Integer type){
+    public void onMessageEvent(String type){
 //        if(0 == type){
             swipeToLoadLayout.post(new Runnable() {
                 @Override
