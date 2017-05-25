@@ -19,8 +19,6 @@ import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.tools.PrefShared;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 /**

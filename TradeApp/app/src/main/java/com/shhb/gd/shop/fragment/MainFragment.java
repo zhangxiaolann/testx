@@ -142,7 +142,6 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        EventBus.getDefault().register(this);//注册EventBus
         if(i == 1){
             swipeToLoadLayout.post(new Runnable() {
                 @Override
@@ -152,6 +151,12 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
                 }
             });
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);//注册EventBus
     }
 
     @Override

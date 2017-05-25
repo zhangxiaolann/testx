@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.view.CustomViewPager;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
