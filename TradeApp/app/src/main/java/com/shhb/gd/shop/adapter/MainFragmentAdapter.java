@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,18 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     /** 哪一个Fragment*/
     private final int mType;
+    /** 请求数据的页码 */
+    private int mPageIndex;
+    /** 请求完后得到的List的size */
+    private int mListSize;
     /** banner的View标识 */
     private static final int TYPE_BANNER = 0;
     /** 中间区域的View标识 */
     private static final int TYPE_GROUP = 1;
     /** recycler的ItemView标识 */
     private static final int TYPE_RECYCLER = 2;
+    /** 底线 */
+    private static final int TYPE_FOOTER = 3;
     /** banner的数据 */
     private final List<BannerInfo> bannerInfos;
     /** recycler的数据 */
@@ -52,9 +59,11 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     /**
      * 通过异步请求将列表的数据填充到Adapter
      * @param datas
-     * @param mPageIndex 1是刷新
+     * @param pageIndex 1是刷新
      */
-    public void addRecyclerData(List<Map<String, Object>> datas, int mPageIndex) {
+    public void addRecyclerData(List<Map<String, Object>> datas, int pageIndex) {
+        mListSize = datas.size();
+        mPageIndex = pageIndex;
         if(mPageIndex == 1){
             listMap.clear();
         }
@@ -80,11 +89,14 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      */
     @Override
     public int getItemViewType(int position) {
+        Log.e("列表的size和postion",getItemCount()+"|"+position);
         if (position == 0 && mType == 0){
             return TYPE_BANNER;
         } else if(position == 1 && mType == 0){
             return TYPE_GROUP;
-        } else {
+        } /*else if(position >= (getItemCount() + 1) || (mPageIndex != 0 && mListSize == 0)){
+            return TYPE_FOOTER;
+        }*/ else {
             return TYPE_RECYCLER;
         }
     }
@@ -104,6 +116,9 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_RECYCLER:
                 itemView = inflate(viewGroup, R.layout.recycler_item);
                 return new RecyclerHolder(itemView);
+            case TYPE_FOOTER:
+                itemView = inflate(viewGroup, R.layout.footer_view);
+                return new FooterHolder(itemView);
         }
         throw new IllegalArgumentException("Wrong type!");
     }
@@ -126,12 +141,14 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_BANNER:
                 onBindBannerHolder((BannerHolder) viewHolder,i);
                 break;
-            case TYPE_GROUP:
+//            case TYPE_GROUP:
 //                onBindGroupHolder((GroupHolder) viewHolder);
-                break;
+//                break;
             case TYPE_RECYCLER:
                 onBindRecyclerHolder((RecyclerHolder) viewHolder,i);
                 break;
+//            case TYPE_FOOTER:
+//                break;
         }
     }
 
@@ -273,6 +290,14 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     onClickListener.onClick(view,getPosition(),listMap);
                     break;
             }
+        }
+    }
+
+    class FooterHolder extends RecyclerView.ViewHolder{
+
+        /** 添加底线 */
+        public FooterHolder(View itemView) {
+            super(itemView);
         }
     }
 

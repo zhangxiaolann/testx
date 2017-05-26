@@ -56,15 +56,12 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
     private MainFragmentAdapter mAdapter;
-    /**
-     * 请求页码
-     */
+    /** 请求页码*/
     private int mPageIndex = 1;
-    /**
-     * 每页请求数量
-     */
+    /** 每页请求数量*/
     private final static int pageNum = 10;
-    private int i = 1;
+    /** 每页请求数量*/
+    private int lifeCycle = 1;
 
     public static MainFragment newInstance(String type) {
         MainFragment fragment = new MainFragment();
@@ -144,12 +141,12 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(i == 1){
+        if(lifeCycle == 1){
             swipeToLoadLayout.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeToLoadLayout.setRefreshing(true);
-                    i = 2;
+                    lifeCycle = 2;
                 }
             });
         }
