@@ -31,8 +31,6 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final int mType;
     /** 请求数据的页码 */
     private int mPageIndex;
-    /** 请求完后得到的List的size */
-    private int mListSize;
     /** banner的View标识 */
     private static final int TYPE_BANNER = 0;
     /** 中间区域的View标识 */
@@ -62,8 +60,6 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      * @param pageIndex 1是刷新
      */
     public void addRecyclerData(List<Map<String, Object>> datas, int pageIndex) {
-        mListSize = datas.size();
-        mPageIndex = pageIndex;
         if(mPageIndex == 1){
             listMap.clear();
         }
@@ -257,16 +253,12 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     class RecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private LinearLayout goodsMain;
         private ImageView goodsImg,shareImg;
         private TextView type,title,cPrice,oPrice,bNum,rebate;
 
         /** 获取到recycler中的每一个View */
         public RecyclerHolder(View itemView) {
             super(itemView);
-            int width = (int) (BaseTools.getWindowsWidth((Activity) itemView.getContext()) / 2);
-            goodsMain = (LinearLayout) itemView.findViewById(R.id.goods_main);
-//            goodsMain.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
             goodsImg = (ImageView) itemView.findViewById(R.id.goods_img);
             shareImg = (ImageView) itemView.findViewById(R.id.share_img);
             type = (TextView) itemView.findViewById(R.id.goods_type);

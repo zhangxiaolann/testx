@@ -107,16 +107,12 @@ public class RecyclerFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     class RecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private LinearLayout goodsMain;
         private ImageView goodsImg,shareImg;
         private TextView type,title,cPrice,oPrice,bNum,rebate;
 
         /** 获取到recycler中的每一个View */
         public RecyclerHolder(View itemView) {
             super(itemView);
-            int width = (int) (BaseTools.getWindowsWidth((Activity) itemView.getContext()) / 2);
-            goodsMain = (LinearLayout) itemView.findViewById(R.id.goods_main);
-//            goodsMain.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT));
             goodsImg = (ImageView) itemView.findViewById(R.id.goods_img);
             shareImg = (ImageView) itemView.findViewById(R.id.share_img);
             type = (TextView) itemView.findViewById(R.id.goods_type);

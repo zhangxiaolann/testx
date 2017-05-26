@@ -1,8 +1,11 @@
 package com.shhb.gd.shop.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +33,7 @@ import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
-
+import com.shhb.gd.shop.view.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -110,7 +113,9 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
             });
         }
         recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.addItemDecoration(new RecyclerViewDivider(context, LinearLayoutManager.VERTICAL, 2, ContextCompat.getColor(context, R.color.webBg)));
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(context, DividerItemDecoration.BOTH_SET,6,ContextCompat.getColor(context, R.color.webBg))
+        );
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickListener(this);
 
@@ -129,12 +134,12 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String type){
 //        if(0 == type){
-            swipeToLoadLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeToLoadLayout.setRefreshing(true);
-                }
-            });
+//            swipeToLoadLayout.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    swipeToLoadLayout.setRefreshing(true);
+//                }
+//            });
 //        }
     }
 

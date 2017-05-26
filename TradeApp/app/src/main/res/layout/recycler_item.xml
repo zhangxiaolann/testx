@@ -2,121 +2,113 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:background="@drawable/recycler_btn_bg"
     android:gravity="center"
-    android:background="@drawable/recycler_btn_bg">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/goods_main"
+    <RelativeLayout
+        android:layout_width="180dp"
+        android:layout_height="180dp">
+
+        <ImageView
+            android:id="@+id/goods_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/share_img"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/dis_view_bg"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ico_share_new" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <RelativeLayout
-            android:layout_width="180dp"
-            android:layout_height="180dp">
-
-            <ImageView
-                android:id="@+id/goods_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY" />
-
-            <ImageView
-                android:id="@+id/share_img"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/ico_share_new"
-                android:background="@drawable/dis_view_bg"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/goods_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:padding="5dp">
+            android:background="@drawable/tm_btn_bg"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/goods_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tm_btn_bg"
-                android:text=""
-                android:textColor="@android:color/white"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/goods_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text=" "
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/goods_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="5dp">
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text=" "
+            android:textColor="@android:color/black"
+            android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/cPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:text=""
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="17sp" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/oPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/cPrice"
-                android:text=""
-                android:textSize="12sp" />
-        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/cPrice"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text=""
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/bNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:text=""
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="12sp" />
+        <TextView
+            android:id="@+id/oPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/cPrice"
+            android:text=""
+            android:textSize="12sp" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/rebate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:text=""
-                android:textColor="@android:color/holo_green_dark"
-                android:textSize="13sp" />
-        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/bNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text=""
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/rebate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text=""
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="13sp" />
+    </RelativeLayout>
 
 </LinearLayout>

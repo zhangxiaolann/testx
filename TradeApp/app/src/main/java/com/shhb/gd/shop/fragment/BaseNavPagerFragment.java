@@ -52,12 +52,29 @@ public abstract class BaseNavPagerFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout.addOnTabSelectedListener(tabChangeListener);
         viewPager = (CustomViewPager) view.findViewById(R.id.viewPager);
-        viewPager.setCurrentItem(0,false);
         viewPager.setScanScroll(true);
         viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
+
+    private TabLayout.OnTabSelectedListener tabChangeListener = new TabLayout.OnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            viewPager.setCurrentItem(tab.getPosition(),false);
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+    };
 
     protected static class Adapter extends FragmentPagerAdapter {
         private List<Fragment> fragments = new ArrayList<>();

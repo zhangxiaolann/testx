@@ -3,6 +3,7 @@ package com.shhb.gd.shop.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
+import com.shhb.gd.shop.view.DividerItemDecoration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -99,7 +101,9 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
         recyclerView = (RecyclerView) view.findViewById(R.id.swipe_target);
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.addItemDecoration(new RecyclerViewDivider(context, LinearLayoutManager.VERTICAL, 2, ContextCompat.getColor(context, R.color.webBg)));
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(context, DividerItemDecoration.BOTH_SET,6, ContextCompat.getColor(context, R.color.webBg))
+        );
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickListener(this);
 
