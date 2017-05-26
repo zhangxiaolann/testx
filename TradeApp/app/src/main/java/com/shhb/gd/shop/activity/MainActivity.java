@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity{
         mViewNeedOffset = findViewById(R.id.view_need_offset);
         mainView = (RelativeLayout) findViewById(R.id.main);
         buttonView = (CustomViewPager) findViewById(R.id.viewPager);
-        buttonView.setScanScroll(true);
+        buttonView.setScanScroll(false);
         buttonView.setOffscreenPageLimit(4);
         navigationBar = (BottomNavigationBar) findViewById(R.id.navigation_bar);
     }
