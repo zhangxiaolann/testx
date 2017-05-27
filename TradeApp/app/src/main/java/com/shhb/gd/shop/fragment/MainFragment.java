@@ -102,20 +102,19 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
                 @Override
                 public int getSpanSize(int position) {
-                    if (position == 0) {
-                        return 2;
-                    } else if (position == 1) {
+                    if (position == 0 || position == 1) {
                         return 2;
                     } else {
                         return 1;
                     }
                 }
             });
+        } else {
+            recyclerView.addItemDecoration(
+                    new DividerItemDecoration(context, DividerItemDecoration.BOTH_SET,6,ContextCompat.getColor(context, R.color.webBg))
+            );
         }
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(
-                new DividerItemDecoration(context, DividerItemDecoration.BOTH_SET,6,ContextCompat.getColor(context, R.color.webBg))
-        );
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickListener(this);
 
