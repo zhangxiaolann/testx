@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -60,6 +59,7 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      * @param pageIndex 1是刷新
      */
     public void addRecyclerData(List<Map<String, Object>> datas, int pageIndex) {
+        this.mPageIndex = pageIndex;
         if(mPageIndex == 1){
             listMap.clear();
         }
@@ -72,6 +72,20 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         bannerInfos.clear();
         bannerInfos.addAll(datas);
     }
+
+//    @Override
+//    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+//        super.onViewAttachedToWindow(holder);
+//        int position = holder.getLayoutPosition();
+//        int type = getItemViewType(position);
+//        if(TYPE_BANNER == type || TYPE_GROUP == type){
+//            ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+//            if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+//                StaggeredGridLayoutManager.LayoutParams lp = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
+//                lp.setFullSpan(true);
+//            }
+//        }
+//    }
 
     @Override
     public int getItemCount() {

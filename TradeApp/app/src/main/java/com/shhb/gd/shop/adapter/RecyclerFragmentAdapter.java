@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 public class RecyclerFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    /** 哪一个Fragment*/
     private final int fType;
+    /** 请求数据的页码 */
+    private int mPageIndex;
     /** recycler的数据 */
     private final List<Map<String, Object>> listMap;
     private static OnClickListener onClickListener;
@@ -37,9 +40,10 @@ public class RecyclerFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
     /**
      * 通过异步请求将列表的数据填充到Adapter
      * @param datas
-     * @param mPageIndex 1是刷新
+     * @param pageIndex 1是刷新
      */
-    public void addRecyclerData(List<Map<String, Object>> datas, int mPageIndex) {
+    public void addRecyclerData(List<Map<String, Object>> datas, int pageIndex) {
+        this.mPageIndex = pageIndex;
         if(mPageIndex == 1){
             listMap.clear();
         }

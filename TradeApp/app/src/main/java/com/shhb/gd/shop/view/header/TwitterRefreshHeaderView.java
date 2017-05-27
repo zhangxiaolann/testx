@@ -64,7 +64,7 @@ public class TwitterRefreshHeaderView extends SwipeRefreshHeaderLayout {
         ivArrow.clearAnimation();
         ivArrow.setVisibility(GONE);
         progressBar.setVisibility(VISIBLE);
-        tvRefresh.setText("数据刷新中…");
+        tvRefresh.setText("刷新中…");
     }
 
     @Override
@@ -79,7 +79,7 @@ public class TwitterRefreshHeaderView extends SwipeRefreshHeaderLayout {
             progressBar.setVisibility(GONE);
             ivSuccess.setVisibility(GONE);
             if (y > mHeaderHeight) {
-                tvRefresh.setText("松开立即刷新");
+                tvRefresh.setText("释放刷新");
                 if (!rotated) {
                     ivArrow.clearAnimation();
                     ivArrow.startAnimation(rotateUp);
@@ -91,7 +91,7 @@ public class TwitterRefreshHeaderView extends SwipeRefreshHeaderLayout {
                     ivArrow.startAnimation(rotateDown);
                     rotated = false;
                 }
-                tvRefresh.setText("下拉可以刷新");
+                tvRefresh.setText("下拉刷新");
             }
         }
     }
@@ -108,7 +108,7 @@ public class TwitterRefreshHeaderView extends SwipeRefreshHeaderLayout {
         ivArrow.clearAnimation();
         ivArrow.setVisibility(GONE);
         progressBar.setVisibility(GONE);
-        tvRefresh.setText("更新完成");
+        tvRefresh.setText("刷新完成");
     }
 
     @Override
