@@ -37,6 +37,8 @@ public class Constants {
     public static final String FIND_BY_TABS_REFRESH = REQUEST + "GoodsShow/cateGoods";
     /** 查找选项卡和对应的内容(上拉加载的时候)*/
     public static final String FIND_BY_TABS_LOAD = REQUEST + "GoodsShow/showGoods";
+    /** 热门搜索*/
+    public static final String FIND_BY_HOT = REQUEST + "GoodsShow/hotTab";
     /** 首页商品*/
     public static final String FIND_BY_GOODS1 = REQUEST + "GoodsShow/soldGoods";
     /** 商品详情*/

@@ -6,10 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -17,7 +20,9 @@ import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.activity.AlibcActivity;
 import com.shhb.gd.shop.activity.LoginActivity;
 import com.shhb.gd.shop.module.AlibcUser;
+import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.PrefShared;
+import com.shhb.gd.shop.view.SearchWindow;
 
 import java.util.List;
 
@@ -26,7 +31,9 @@ import java.util.List;
  */
 
 public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListener{
+    private EditText search;
     private ImageView msg,cart;
+    private SearchWindow searchWindow;
 
     public static Fragment1 newInstance() {
         Fragment1 fragment = new Fragment1();
@@ -41,11 +48,28 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        searchWindow = new SearchWindow(context);
+        search = (EditText) view.findViewById(R.id.search1);
+        search.setOnFocusChangeListener(searchOnFocusChangeListener);
         msg = (ImageView) view.findViewById(R.id.message);
         msg.setOnClickListener(this);
         cart = (ImageView) view.findViewById(R.id.cart);
         cart.setOnClickListener(this);
     }
+
+    View.OnFocusChangeListener searchOnFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (hasFocus){//得到焦点时的处理内容
+                searchWindow.showAtLocation(search, Gravity.CENTER_HORIZONTAL, 0, 0);// 显示窗口
+//                search.setFocusable(true);
+//                search.setFocusableInTouchMode(true);
+                search.clearFocus();//失去焦点
+            } else {//失去焦点时的处理内容
+
+            }
+        }
+    };
 
     @Override
     public void onClick(View view) {
@@ -103,5 +127,4 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
         Log.e("首页的cId", cId);
         return MainFragment.newInstance(cId);
     }
-
 }

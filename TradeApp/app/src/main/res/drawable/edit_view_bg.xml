@@ -23,7 +23,7 @@
         android:width="20dp"
         android:height="20dp"/>-->
     <!-- 填充 -->
-    <!--<solid android:color="@color/bTransparent" />-->
+    <solid android:color="@color/white" />
 
     <!-- 描边 -->
      <stroke

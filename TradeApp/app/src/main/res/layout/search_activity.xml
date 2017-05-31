@@ -1,0 +1,116 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/webBg">
+
+    <RelativeLayout
+        android:id="@+id/margin_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21.5dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/search2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="3dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/cancel"
+            android:background="@drawable/edit_view_bg"
+            android:drawableLeft="@mipmap/ico_search"
+            android:hint="搜索你喜欢的宝贝"
+            android:lines="1"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/text_btn_bg"
+            android:text="取消"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_marginBottom="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:text="热门搜索"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:clipToPadding="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="历史记录"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/cleared"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/text_btn_bg"
+                android:text="清除"
+                android:padding="3dp"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/history_record"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:clipToPadding="false" />
+    </LinearLayout>
+</LinearLayout>

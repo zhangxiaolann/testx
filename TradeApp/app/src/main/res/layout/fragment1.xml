@@ -24,6 +24,7 @@
             android:src="@mipmap/logo" />
 
         <EditText
+            android:id="@+id/search1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -32,7 +33,8 @@
             android:background="@drawable/edit_view_bg"
             android:drawableLeft="@mipmap/ico_search"
             android:hint="搜索你喜欢的宝贝"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:lines="1"/>
 
         <LinearLayout
             android:id="@+id/y_img"
