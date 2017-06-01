@@ -25,8 +25,11 @@ public class Constants {
     public static final String APATCH_PATH = "/out.apatch";
 
     /** 服务器地址*/
-//    public static final String REQUEST = "http://192.168.1.233/shopping_new/";//测试服务器
-    public static final String REQUEST = "http://es3.laizhuan.com/shopping_new/";//正式服务器
+//    public static final String REQUEST = "http://192.168.1.233/shopping_new/";//测试服务器地址
+    public static final String REQUEST = "http://es3.laizhuan.com/shopping_new/";//正式服务器地址
+//    public static final String HTML_REQUEST = "http://192.168.1.140:8020/huiTao2.min/html/";//正式服务器HTML页面地址
+    public static final String HTML_REQUEST = "http://es1.laizhuan.com/huiTao/html/";//正式服务器HTML页面地址
+    
     /** 下载补丁的地址*/
     public static final String PATCH_URL = "http://es1.laizhuan.com/shopping/Shop/android?name=out.apatch";
     /** 查找开化页的图片*/

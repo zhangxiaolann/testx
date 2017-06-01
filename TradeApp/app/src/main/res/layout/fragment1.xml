@@ -32,6 +32,7 @@
             android:layout_toRightOf="@+id/logo_img"
             android:background="@drawable/edit_view_bg"
             android:drawableLeft="@mipmap/ico_search"
+            android:textCursorDrawable="@drawable/cursor_color"
             android:hint="搜索你喜欢的宝贝"
             android:textSize="16sp"
             android:lines="1"/>

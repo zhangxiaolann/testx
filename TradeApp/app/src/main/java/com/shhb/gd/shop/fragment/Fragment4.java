@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.shhb.gd.shop.R;
+import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.module.JsObject;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -41,7 +42,7 @@ public class Fragment4 extends BaseFragment {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webView.loadUrl("http://es1.laizhuan.com/huiTao//html/page/my.html");
+                webView.loadUrl(Constants.HTML_REQUEST + "page/my.html");
             }
         });
         //精致长按事件
@@ -73,28 +74,8 @@ public class Fragment4 extends BaseFragment {
         if (null != ix5) {
             ix5.setScrollBarFadingEnabled(false);
         }
-//        initBroadcastReceiver();
         return view;
     }
-
-//    private void initBroadcastReceiver() {
-//        IntentFilter intentFilter = new IntentFilter(Constants.SENDMSG_LOGIN);
-//        receiver = new broadcastReceiver();
-//        context.registerReceiver(receiver, intentFilter);
-//    }
-//
-//    class broadcastReceiver extends BroadcastReceiver{
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            try {
-//                JSONObject jsonObject = new JSONObject();
-//                jsonObject.put("userId",intent.getStringExtra("userId"));
-//                jsObject.callBack("js_returnUserId",jsonObject.toString());
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     @Override
     public void onPause() {

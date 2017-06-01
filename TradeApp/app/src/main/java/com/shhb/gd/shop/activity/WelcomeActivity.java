@@ -49,8 +49,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.shhb.gd.shop.module.Constants.FIND_BY_TABS_REFRESH;
-
 /**
  * Created by superMoon on 2017/5/8.
  */
@@ -528,7 +526,7 @@ public class WelcomeActivity extends BaseActivity {
                 jsonObject.put("size", "10");//条数
                 jsonObject.put("stype", "0");//0普通，1 9块9
                 String parameter = BaseTools.encodeJson(jsonObject.toString());
-                okHttpUtils.postEnqueue(FIND_BY_TABS_REFRESH, new Callback() {
+                okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                     }
@@ -568,7 +566,7 @@ public class WelcomeActivity extends BaseActivity {
                 jsonObject.put("size", "10");//条数
                 jsonObject.put("stype", "1");//0普通，1 9块9
                 String parameter = BaseTools.encodeJson(jsonObject.toString());
-                okHttpUtils.postEnqueue(FIND_BY_TABS_REFRESH, new Callback() {
+                okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 
@@ -603,35 +601,6 @@ public class WelcomeActivity extends BaseActivity {
             }
         }
     }
-
-//    /**
-//     * 查询9块9的选项卡数据
-//     */
-//    private void findBy9Tabs() {
-//        OkHttpUtils okHttpUtils = new OkHttpUtils(20);
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("cid","1");//分类
-//        jsonObject.put("size", "10");//条数
-//        jsonObject.put("stype", "1");//0普通，1 9块9
-//        String parameter = BaseTools.encodeJson(jsonObject.toString());
-//        okHttpUtils.postEnqueue(Constants.FIND_BY_TABS_REFRESH, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                try {
-//                    String json = response.body().string();
-//                    json = BaseTools.decryptJson(json);
-//                    PrefShared.saveString(context,"9TabJson",json);
-//                } catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, parameter);
-//    }
 
     @Override
     protected void setStatusBar() {

@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -33,7 +32,7 @@ import java.util.List;
 public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListener{
     private EditText search;
     private ImageView msg,cart;
-    private SearchWindow searchWindow;
+    public static SearchWindow searchWindow;
 
     public static Fragment1 newInstance() {
         Fragment1 fragment = new Fragment1();
@@ -61,10 +60,11 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
             if (hasFocus){//得到焦点时的处理内容
-                searchWindow.showAtLocation(search, Gravity.CENTER_HORIZONTAL, 0, 0);// 显示窗口
 //                search.setFocusable(true);
 //                search.setFocusableInTouchMode(true);
                 search.clearFocus();//失去焦点
+                searchWindow.showAtLocation(search, Gravity.CENTER_HORIZONTAL, 0, 0);// 显示窗口
+                BaseTools.openInput(search);
             } else {//失去焦点时的处理内容
 
             }

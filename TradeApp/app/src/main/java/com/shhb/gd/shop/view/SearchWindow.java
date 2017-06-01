@@ -3,13 +3,13 @@ package com.shhb.gd.shop.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -40,6 +40,7 @@ import okhttp3.Response;
 public class SearchWindow extends PopupWindow implements View.OnClickListener,SearchWindowAdapter.OnClickListener {
     private Activity context;
     private View viewmenu;
+    private EditText search;
     private TextView cancel, cleared;
     private RecyclerView recyclerView;
     private SearchWindowAdapter mAdapter;
@@ -54,23 +55,24 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
         viewmenu = inflater.inflate(R.layout.search_activity, null);
         this.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);//设置窗体的宽
         this.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);//设置窗体的高
-        this.setFocusable(true);//点击返回键时可以关闭
         this.setBackgroundDrawable(new ColorDrawable(0));//去掉黑色边框
         this.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);//不让输入法把窗体挤上去
         this.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);//不让输入法把窗体挤上去
+        this.setAnimationStyle(R.style.AnimTop);//设置窗体从底部进入的动画效果
         this.setContentView(viewmenu);
         initView();
     }
 
     private void initView() {
+        search = (EditText) viewmenu.findViewById(R.id.search2);
         cancel = (TextView) viewmenu.findViewById(R.id.cancel);
         cleared = (TextView) viewmenu.findViewById(R.id.cleared);
-        cancel.setOnClickListener(this);
-        cleared.setOnClickListener(this);
         recyclerView = (RecyclerView) viewmenu.findViewById(R.id.search_history);
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
+        cancel.setOnClickListener(this);
+        cleared.setOnClickListener(this);
         mAdapter.setOnClickListener(this);
     }
 
@@ -126,7 +128,8 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancel:
-                this.dismiss();
+                BaseTools.closeInput(context,search);
+                dismiss();
                 break;
         }
     }

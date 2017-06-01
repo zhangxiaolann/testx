@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.shhb.gd.shop.R;
+import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.module.JsObject;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -41,7 +42,7 @@ public class Fragment3 extends BaseFragment {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webView.loadUrl("http://es1.laizhuan.com/huiTao//html/page/invitation.html");
+                webView.loadUrl(Constants.HTML_REQUEST + "page/invitation.html");
             }
         });
         //精致长按事件

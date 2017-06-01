@@ -57,5 +57,17 @@
                 android:src="@mipmap/share" />
         </LinearLayout>
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/schedule"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:indeterminateOnly="false"
+        android:layout_below="@+id/titleView"
+        android:max="100"
+        android:progressDrawable="@drawable/progress_bar_states"
+        android:visibility="gone">
+    </ProgressBar>
 </RelativeLayout>
 

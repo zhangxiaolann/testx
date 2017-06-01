@@ -5,10 +5,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shhb.gd.shop.R;
+import com.shhb.gd.shop.module.Constants;
 import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
@@ -31,12 +33,12 @@ public class ProtocolActivity extends BaseActivity implements View.OnClickListen
     private LinearLayout onBack;
     private TextView title;
     private WebView webView;
+    private ProgressBar schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.title_activity);
-        showToast(0,"加载中");
         initView();
     }
 
@@ -48,14 +50,16 @@ public class ProtocolActivity extends BaseActivity implements View.OnClickListen
         title = (TextView)findViewById(R.id.webView_title);
         title.setText("惠淘服务协议");
 
+        schedule = (ProgressBar) findViewById(R.id.schedule);
+        schedule.setVisibility(View.VISIBLE);
         webView = new WebView(context);
         webView.setBackgroundColor(ContextCompat.getColor(context, R.color.webBg));
         RelativeLayout.LayoutParams webParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
-        webParams.addRule(RelativeLayout.BELOW,titleView.getId());
+        webParams.addRule(RelativeLayout.BELOW,schedule.getId());
         webView.setLayoutParams(webParams);
         titleAll.addView(webView);
 
-        webView.loadUrl("http://192.168.1.142:8020/huiTao2/html/page/agreement.html");
+        webView.loadUrl(Constants.HTML_REQUEST + "page/agreement.html");
         //精致长按事件
         webView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -77,10 +81,9 @@ public class ProtocolActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onProgressChanged(WebView webView, int newProgress) {
                 super.onProgressChanged(webView, newProgress);
+                schedule.setProgress(newProgress);
                 if (newProgress >= 100) {
-                    if(hud.isShowing()){
-                        hud.dismiss();
-                    }
+                    schedule.setVisibility(View.GONE);
                 }
             }
         });

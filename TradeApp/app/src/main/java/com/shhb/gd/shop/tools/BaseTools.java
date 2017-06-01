@@ -10,11 +10,11 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.ciphertext.AES;
 import com.shhb.gd.shop.module.Constants;
 
@@ -75,6 +75,21 @@ public class BaseTools {
         return (int) (dpValue * scale + 0.5f);
     }
 
+    /**
+     * 打开输入法
+     */
+    public final static void openInput(EditText view){
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    /**
+     * 关闭输入法
+     */
+    public final static void closeInput(Activity context,EditText view){
+        InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
     /**
      * 设置添加屏幕的背景透明度

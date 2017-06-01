@@ -44,9 +44,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.shhb.gd.shop.module.Constants.FIND_BY_BRAND_REFRESH;
-import static com.shhb.gd.shop.module.Constants.FIND_BY_CATEGORY_REFRESH;
-
 /**
  * Created by superMoon on 2017/4/26.
  */
@@ -215,7 +212,7 @@ public class MainActivity extends BaseActivity{
                 jsonObject.put("cname","品牌");
                 jsonObject.put("size","10");
                 String parameter = BaseTools.encodeJson(jsonObject.toString());
-                okHttpUtils.postEnqueue(FIND_BY_BRAND_REFRESH, new Callback() {
+                okHttpUtils.postEnqueue(Constants.FIND_BY_BRAND_REFRESH, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                     }
@@ -250,7 +247,7 @@ public class MainActivity extends BaseActivity{
                 jsonObject.put("size","10");
                 jsonObject.put("stype","0");
                 String parameter = BaseTools.encodeJson(jsonObject.toString());
-                okHttpUtils.postEnqueue(FIND_BY_CATEGORY_REFRESH, new Callback() {
+                okHttpUtils.postEnqueue(Constants.FIND_BY_CATEGORY_REFRESH, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                     }
@@ -312,14 +309,26 @@ public class MainActivity extends BaseActivity{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if ((System.currentTimeMillis() - mExitTime) > 2000) {
-                Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
-                mExitTime = System.currentTimeMillis();
+            if (null != Fragment1.searchWindow) {
+                if (Fragment1.newInstance().searchWindow.isShowing()) {
+                    Fragment1.newInstance().searchWindow.dismiss();
+                } else {
+                    exit();
+                }
             } else {
-                MainApplication.exit();
+                exit();
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit(){
+        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        } else {
+            MainApplication.exit();
+        }
     }
 }
