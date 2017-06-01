@@ -309,15 +309,7 @@ public class MainActivity extends BaseActivity{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (null != Fragment1.searchWindow) {
-                if (Fragment1.newInstance().searchWindow.isShowing()) {
-                    Fragment1.newInstance().searchWindow.dismiss();
-                } else {
-                    exit();
-                }
-            } else {
-                exit();
-            }
+            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);

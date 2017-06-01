@@ -23,9 +23,10 @@
             android:layout_toLeftOf="@+id/cancel"
             android:background="@drawable/edit_view_bg"
             android:textCursorDrawable="@drawable/cursor_color"
+            android:imeOptions="actionSearch"
             android:drawableLeft="@mipmap/ico_search"
             android:hint="搜索你喜欢的宝贝"
-            android:lines="1"
+            android:singleLine="true"
             android:textSize="15sp"
             android:textColor="@color/black"/>
 

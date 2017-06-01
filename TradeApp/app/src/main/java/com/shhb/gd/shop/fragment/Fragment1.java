@@ -30,9 +30,9 @@ import java.util.List;
  */
 
 public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListener{
-    private EditText search;
+    private EditText search1;
     private ImageView msg,cart;
-    public static SearchWindow searchWindow;
+    private SearchWindow searchWindow;
 
     public static Fragment1 newInstance() {
         Fragment1 fragment = new Fragment1();
@@ -48,8 +48,8 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         searchWindow = new SearchWindow(context);
-        search = (EditText) view.findViewById(R.id.search1);
-        search.setOnFocusChangeListener(searchOnFocusChangeListener);
+        search1 = (EditText) view.findViewById(R.id.search1);
+        search1.setOnFocusChangeListener(searchOnFocusChangeListener);
         msg = (ImageView) view.findViewById(R.id.message);
         msg.setOnClickListener(this);
         cart = (ImageView) view.findViewById(R.id.cart);
@@ -62,9 +62,9 @@ public class Fragment1 extends BaseNavPagerFragment implements View.OnClickListe
             if (hasFocus){//得到焦点时的处理内容
 //                search.setFocusable(true);
 //                search.setFocusableInTouchMode(true);
-                search.clearFocus();//失去焦点
-                searchWindow.showAtLocation(search, Gravity.CENTER_HORIZONTAL, 0, 0);// 显示窗口
-                BaseTools.openInput(search);
+                search1.clearFocus();//失去焦点
+                searchWindow.showAtLocation(search1, Gravity.CENTER_HORIZONTAL, 0, 0);// 显示窗口
+                BaseTools.openInput(search1);
             } else {//失去焦点时的处理内容
 
             }

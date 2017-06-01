@@ -6,9 +6,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -40,7 +42,7 @@ import okhttp3.Response;
 public class SearchWindow extends PopupWindow implements View.OnClickListener,SearchWindowAdapter.OnClickListener {
     private Activity context;
     private View viewmenu;
-    private EditText search;
+    private EditText search2;
     private TextView cancel, cleared;
     private RecyclerView recyclerView;
     private SearchWindowAdapter mAdapter;
@@ -55,6 +57,7 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
         viewmenu = inflater.inflate(R.layout.search_activity, null);
         this.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);//设置窗体的宽
         this.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);//设置窗体的高
+        this.setFocusable(true);
         this.setBackgroundDrawable(new ColorDrawable(0));//去掉黑色边框
         this.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);//不让输入法把窗体挤上去
         this.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);//不让输入法把窗体挤上去
@@ -64,7 +67,8 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
     }
 
     private void initView() {
-        search = (EditText) viewmenu.findViewById(R.id.search2);
+        search2 = (EditText) viewmenu.findViewById(R.id.search2);
+        search2.setOnEditorActionListener(search2OnEditorActionListener);
         cancel = (TextView) viewmenu.findViewById(R.id.cancel);
         cleared = (TextView) viewmenu.findViewById(R.id.cleared);
         recyclerView = (RecyclerView) viewmenu.findViewById(R.id.search_history);
@@ -75,6 +79,16 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
         cleared.setOnClickListener(this);
         mAdapter.setOnClickListener(this);
     }
+
+    TextView.OnEditorActionListener search2OnEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+            if(actionId == EditorInfo.IME_ACTION_SEARCH){
+
+            }
+            return false;
+        }
+    };
 
     private void findByData() {
         OkHttpUtils okHttpUtils = new OkHttpUtils(20);
@@ -128,7 +142,6 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancel:
-                BaseTools.closeInput(context,search);
                 dismiss();
                 break;
         }
