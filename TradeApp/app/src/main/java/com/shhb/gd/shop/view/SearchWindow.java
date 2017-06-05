@@ -3,7 +3,7 @@ package com.shhb.gd.shop.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -44,7 +44,7 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
     private View viewmenu;
     private EditText search2;
     private TextView cancel, cleared;
-    private RecyclerView recyclerView;
+    private FlowLayout flowLayout ;
     private SearchWindowAdapter mAdapter;
     private List<Map<String,Object>> listMap = new ArrayList<>();
 
@@ -71,10 +71,7 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
         search2.setOnEditorActionListener(search2OnEditorActionListener);
         cancel = (TextView) viewmenu.findViewById(R.id.cancel);
         cleared = (TextView) viewmenu.findViewById(R.id.cleared);
-        recyclerView = (RecyclerView) viewmenu.findViewById(R.id.search_history);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 2, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mAdapter);
+        flowLayout = (FlowLayout) viewmenu.findViewById(R.id.search_flow);
         cancel.setOnClickListener(this);
         cleared.setOnClickListener(this);
         mAdapter.setOnClickListener(this);
@@ -122,16 +119,13 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
                 JSONArray array = jsonObject.getJSONArray("data");
                 for(int i = 0;i < array.size();i++){
                     String name = array.getString(i);
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("name",name);
-                    listMap.add(map);
+                    TextView textView = new TextView(context);
+                    textView.setTextSize(16);
+                    textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                    textView.setBackgroundResource(R.drawable.text_btn_bg);
+                    textView.setText(name);
+                    flowLayout.addView(textView);
                 }
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.addRecyclerData(listMap);
-                    }
-                });
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -44,19 +44,42 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
 
-        <!-- 友盟Key -->
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="584a25cda325114535000dec" />
-        <!-- 友盟消息推送Secret -->
-        <meta-data
-            android:name="UMENG_MESSAGE_SECRET"
-            android:value="e260b6cebb49d8ec900b9c9b6566fd16"></meta-data>
-        <!-- 友盟渠道号 -->
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="Channel ID" />
+        <!-- 阿里热更新（开始） -->
+            <meta-data
+                android:name="com.taobao.android.hotfix.IDSECRET"
+                android:value="93821-1" />
+            <meta-data
+                android:name="com.taobao.android.hotfix.APPSECRET"
+                android:value="a13d3d6a8cf33d063f630f3d2b571727" />
+            <meta-data
+                android:name="com.taobao.android.hotfix.RSASECRET"
+                android:value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDFODt4XgcmMePPr4qZpjj9/K4JX1F2KGMLOjeNElfWzE9yxoFxEV1HmUhKPSlCU1uuDiwhj/cTZLK2gYDlfR3Sgs06BKGrwn/llVAD7XjG1FSsbZm/hsQbrBKERRbPrtotDTXP17+Oa9KbcGIhvSvMXOUQHB/3iHpk5ZajKrBGVjjZpFBZnxtR9rsWOc1UsInvERfXUYidtaPeZ3ChWJLtNVy8TrWEM67qxddw/LFu4w+jijNV9jji6QLwbb2o+K7+so6UtgsZtL4TvZqB++W3C3U6+aRIx+dzsxCBrOYn+6FWoY8N5vVd0Eo7hD96XAKS7+mkMtRHuxZ2pkVMSXE9AgMBAAECggEAZyJg9zE0y+SLHbDO6kriwu/Ak2YlU4ULRnPLWRqelNWDNqJYTqil/ytJgok5alXtO7htm5+NtbaTPp26qkgjsFJ2wEBry0aLW6QZk/Q7lL61CPbH0EDJjS8O/9yhcTofHjAqU+afZfs8x8ydhMdIgDaUEzih/vCAEQN/IxTP2feRvNxb1UwtR6DRIYoP7pvbGI72lsh6PHJMsYtLXN0X6G1NcS1ATWzyTZ/UwIryeq0S70EXSTm205ji26OcLa4NPgnueEiEQN+lLtf/qoHNKbskdX4PRDc4PK6FG20wflovNzAgL5FZwVGI+bd4MZlEzJkb+jvqbmIQlqe/XzkIgQKBgQDrpEFpTAoxGVkeO+7D5e5VmzRzg7doOsJ7ygzC5M5RQNCU5Hdu6ryejpt9CMxipsY5TuJOwQDIl6Rh4WLIp8Nff2smuml/shcfifw9mkF/FZIfwL8yhnlfzQGehiN7mYATHRdm/9Mu2yzmkps/fheeTtqKLXU1vslt068ZxiwP3wKBgQDWQjBIcen9bz99SIV36zRjQ4hj/B/bCAZzGxtb7XpTUgB20txnYt4WYFUfIAETsxTY/MhaG2exsEKMloYeOkJ+vA7mwrPUt2wYVasGW6Vttyney3q1Je7x3tCBcfVeR6Z6u9C8BCVk2NfmFeduloymbuKifIm3E/cqAXBuo5JyYwKBgE6+GM2jB1TY75rW1DbKQxaAQsrHHSbLW+oZ3qHR68/jJNBceDysXFNvvC3QHtxodpz360/91tExO1EqC+SZiwQChD/w0whE7s0vQwci4PgisS3DLyEnJrAIxZ2/nWPUK6Q3eHaGzn895oc2PoK9FA9mskiyYBSRqKX2svCd9GNpAoGBAKjRoiWSzCGKZGYcnD1ur+p+rZrKb3cvjZVoiFgYd8fq1r7JSiyT9BWBddB+cRrKgeSu2FZXPY7+KJGJkMeEdBxTpRIh23wBwkQyS/1IfMJEDdOkVF0jNHCTdYpo9kKBBiWykrdyNNyPFx4NqDq0mMISoLQSmJgOPTN1ytcCP0OtAoGAU5f7C3cT46OexAEBAmdBrUQ8h5TmmCODxaA8GOXvOhHs9Yt8t0oOus7vC39PoS3bvbbWVLhRIqpDkyssArYyt+ti9KBB6wdO08ZM6ln79XYuhxyEspkECJwuWFSqNNKXiILo+q2Eq3v+KKUiVdHP/HMSKv5q78+q2mhn2rQguU8=" />
+        <!-- 阿里热更新（结束） -->
 
+        <!-- 友盟配置（开始） -->
+
+        <!-- 友盟Key -->
+            <meta-data
+                android:name="UMENG_APPKEY"
+                android:value="584a25cda325114535000dec" />
+            <!-- 友盟消息推送Secret -->
+            <meta-data
+                android:name="UMENG_MESSAGE_SECRET"
+                android:value="e260b6cebb49d8ec900b9c9b6566fd16"></meta-data>
+            <!-- 友盟渠道号 -->
+            <meta-data
+                android:name="UMENG_CHANNEL"
+                android:value="Channel ID" />
+        <!-- 友盟配置（结束） -->
+
+        <!-- 高德配置（开始） -->
+            <!-- 设置key -->
+            <meta-data
+                android:name="com.amap.api.v2.apikey"
+                android:value="be249e909615e5ee7e45e6d41ab716c9" />
+            <!-- 定位需要的服务 -->
+            <service android:name="com.amap.api.location.APSService" />
+        <!-- 高德配置（结束） -->
         <activity
             android:name=".activity.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -116,7 +139,7 @@
         <activity
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -129,8 +152,10 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tencent1105875200" />
             </intent-filter>
         </activity>
@@ -139,15 +164,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <!-- 高德配置（开始） -->
-        <!-- 设置key -->
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="be249e909615e5ee7e45e6d41ab716c9" />
-        <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService" />
-        <!-- 高德配置（结束） -->
     </application>
 
 </manifest>

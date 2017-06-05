@@ -39,6 +39,7 @@ import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
 import com.shhb.gd.shop.view.CustomViewPager;
+import com.taobao.sophix.SophixManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,11 +92,13 @@ public class WelcomeActivity extends BaseActivity {
             if(sdPermission != PackageManager.PERMISSION_GRANTED){//还没有获取获取手机信息的权限
                 requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, Constants.PHONE_CODE);
             } else {
+                SophixManager.getInstance().queryAndLoadNewPatch();
                 initLocation();
                 findBanner();
                 findByHomeOr9Tabs();
             }
         } else {
+            SophixManager.getInstance().queryAndLoadNewPatch();
             initLocation();
             findBanner();
             findByHomeOr9Tabs();
@@ -125,6 +128,7 @@ public class WelcomeActivity extends BaseActivity {
             case Constants.SD_CODE:
                 if(permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){//用户同意SD读写权限
                     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},Constants.LOCATION_CODE);//定位权限
+                    SophixManager.getInstance().queryAndLoadNewPatch();
                 } else {
                     showAlertDialog(requestCode);
                 }
@@ -141,12 +145,12 @@ public class WelcomeActivity extends BaseActivity {
      * 开始定位
      */
     private void initLocation(){
-//        long yqTime = PrefShared.getLong(context,"yqTime");
-//        String current = (System.currentTimeMillis())+"";
-//        current = current.substring(0,10);
-//        long xzTime = Long.parseLong(current);
-//        long s = (xzTime - yqTime) / 60;
-//        if(s > 10){//十分钟进行一次定位
+        long yqTime = PrefShared.getLong(context,"yqTime");
+        String current = (System.currentTimeMillis())+"";
+        current = current.substring(0,10);
+        long xzTime = Long.parseLong(current);
+        long s = (xzTime - yqTime) / 60;
+        if(s > 10){//十分钟进行一次定位
             mLocationClient = new AMapLocationClient(getApplicationContext());//初始化定位
             mLocationClient.setLocationListener(mLocationListener);//设置定位回调监听
             mLocationOption = new AMapLocationClientOption();//初始化AMapLocationClientOption对象
@@ -155,7 +159,7 @@ public class WelcomeActivity extends BaseActivity {
             mLocationOption.setOnceLocationLatest(true);//获取最近3s内精度最高的一次定位结果
             mLocationClient.setLocationOption(mLocationOption);//给定位客户端对象设置定位参数
             mLocationClient.startLocation();//启动定位
-//        }
+        }
     }
 
     //声明定位回调监听器
@@ -184,10 +188,10 @@ public class WelcomeActivity extends BaseActivity {
                     addres = aMapLocation.getErrorCode()+"";
                 }
                 PrefShared.saveString(context,"position",addres);
-//                String current = (System.currentTimeMillis())+"";
-//                current = current.substring(0,10);
-//                long xzTime = Long.parseLong(current);
-//                PrefShared.saveLong(context,"yqTime",xzTime);
+                String current = (System.currentTimeMillis())+"";
+                current = current.substring(0,10);
+                long xzTime = Long.parseLong(current);
+                PrefShared.saveLong(context,"yqTime",xzTime);
             }
         }
     };

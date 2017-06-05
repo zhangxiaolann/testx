@@ -9,12 +9,12 @@ import android.util.Log;
 
 import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
 import com.alibaba.baichuan.android.trade.callback.AlibcTradeInitCallback;
-import com.alibaba.wireless.security.jaq.JAQException;
-import com.alibaba.wireless.security.jaq.SecurityInit;
-import com.alipay.euler.andfix.patch.PatchManager;
 import com.shhb.gd.shop.activity.DetailsActivity;
 import com.shhb.gd.shop.activity.MainActivity;
 import com.shhb.gd.shop.tools.PrefShared;
+import com.taobao.sophix.PatchStatus;
+import com.taobao.sophix.SophixManager;
+import com.taobao.sophix.listener.PatchLoadStatusListener;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.TbsListener;
 import com.umeng.message.IUmengRegisterCallback;
@@ -37,25 +37,24 @@ public class MainApplication extends Application {
 
     private static MainApplication instance;
     private static List<Activity> activityList = new ArrayList<>();
-    public static PatchManager mPatchManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = this;
-        getStatusBarHeight();
-        initUMConfig();
         initAlib();
+        initUMConfig();
         initX5();
+        getStatusBarHeight();
     }
 
     /**
      * 友盟SDK中配置三方平台的appkey
      */
     private void initUMConfig() {
-        PlatformConfig.setWeixin("wx14f57378c2bf71ab","5116790b9c1250727c692ec6c75bc9e5");
-        PlatformConfig.setQQZone("1105875200","rorKP9K2hG30ta4b");
-        PlatformConfig.setSinaWeibo("613051778","6666dd1474995c706a03dbc09d731ced","http://sns.whalecloud.com");
+        PlatformConfig.setWeixin("wx14f57378c2bf71ab", "5116790b9c1250727c692ec6c75bc9e5");
+        PlatformConfig.setQQZone("1105875200", "rorKP9K2hG30ta4b");
+        PlatformConfig.setSinaWeibo("613051778", "6666dd1474995c706a03dbc09d731ced", "http://sns.whalecloud.com");
         Config.DEBUG = true;//关闭友盟debug模式
 //        Log.LOG = false;//关闭友盟的Log
 //        Config.IsToastTip = false;//关闭友盟的Toast
@@ -75,7 +74,7 @@ public class MainApplication extends Application {
      * 初始化友盟推送
      */
     private void initUMPush() {
-        try{
+        try {
             //注册推送服务，每次调用register方法都会回调该接口
             PushAgent mPushAgent = PushAgent.getInstance(this);//初始化消息推送对象
             mPushAgent.register(new IUmengRegisterCallback() {
@@ -89,7 +88,7 @@ public class MainApplication extends Application {
 //                    Log.e("UmPush","failure");
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
 //            Log.e("UmPush","error");
             e.printStackTrace();
         }
@@ -100,14 +99,14 @@ public class MainApplication extends Application {
      */
     private void customActivity() {
         PushAgent mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.setNotificationClickHandler(new UmengNotificationClickHandler(){
+        mPushAgent.setNotificationClickHandler(new UmengNotificationClickHandler() {
             @Override
             public void dealWithCustomAction(Context context, UMessage uMessage) {
                 super.dealWithCustomAction(context, uMessage);
                 try {
-                    if(uMessage.custom != null && !TextUtils.equals(uMessage.custom,"")){
+                    if (uMessage.custom != null && !TextUtils.equals(uMessage.custom, "")) {
                         Intent intent = new Intent(context, DetailsActivity.class);
-                        intent.putExtra("result",uMessage.custom);
+                        intent.putExtra("result", uMessage.custom);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
@@ -115,7 +114,7 @@ public class MainApplication extends Application {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
@@ -128,25 +127,24 @@ public class MainApplication extends Application {
      * 初始化阿里相关组件
      */
     private void initAlib() {
-//        initJAQ();
-        initBC();
         initAndFix();
+        initBC();
     }
 
-    /**
-     * 初始化聚安全
-     */
-    private void initJAQ() {
-        try {
-            if(SecurityInit.Initialize(getApplicationContext()) == 0){
+//    /**
+//     * 初始化聚安全
+//     */
+//    private void initJAQ() {
+//        try {
+//            if (SecurityInit.Initialize(getApplicationContext()) == 0) {
 //                Log.e("初始化聚安全", "成功");
-            } else {
+//            } else {
 //                Log.e("初始化聚安全", "失败");
-            }
-        } catch (JAQException e) {
+//            }
+//        } catch (JAQException e) {
 //            Log.e("1", "errorCode =" + e.getErrorCode());
-        }
-    }
+//        }
+//    }
 
     /**
      * 初始化百川
@@ -171,15 +169,37 @@ public class MainApplication extends Application {
      * 初始化AndFix
      */
     private void initAndFix() {
-        mPatchManager = new PatchManager(this);
-        String appversion = "";
+        String versionName = "";
         try {
-            appversion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-            mPatchManager.init(appversion);
-            mPatchManager.loadPatch();
+            versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (Exception e) {
-            e.printStackTrace();
+            versionName = "2.0.0";
         }
+        SophixManager.getInstance().setContext(this)
+                .setAppVersion(versionName)//应用的版本号
+                .setAesKey(null)
+                .setEnableDebug(true)//是否调试模式
+                .setPatchLoadStatusStub(new PatchLoadStatusListener() {
+                    @Override
+                    public void onLoad(final int mode, final int code, final String info, final int handlePatchVersion) {
+                        // 补丁加载回调通知
+                        if (code == PatchStatus.CODE_LOAD_SUCCESS) {
+                            // 表明补丁加载成功
+                            Log.e("补丁加载","成功");
+                        } else if (code == PatchStatus.CODE_LOAD_RELAUNCH) {
+                            // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
+                            // 建议: 用户可以监听进入后台事件, 然后应用自杀
+                            Log.e("补丁加载","生效需要重启");
+                        } else if (code == PatchStatus.CODE_LOAD_FAIL) {
+                            // 内部引擎异常, 推荐此时清空本地补丁, 防止失败补丁重复加载
+                            Log.e("补丁加载","内部引擎异常");
+                            SophixManager.getInstance().cleanPatches();
+                        } else {
+                            // 其它错误信息, 查看PatchStatus类说明
+                            Log.e("补丁加载","其它错误信息"+code+"，"+info);
+                        }
+                    }
+                }).initialize();
     }
 
     /**
@@ -202,21 +222,21 @@ public class MainApplication extends Application {
         QbSdk.setTbsListener(new TbsListener() {
             @Override
             public void onDownloadFinish(int i) {
-                Log.e("app","onDownloadFinish is " + i);
+                Log.e("app", "onDownloadFinish is " + i);
             }
 
             @Override
             public void onInstallFinish(int i) {
-                Log.e("app","onInstallFinish is " + i);
+                Log.e("app", "onInstallFinish is " + i);
             }
 
             @Override
             public void onDownloadProgress(int i) {
-                Log.e("app","onDownloadProgress:"+i);
+                Log.e("app", "onDownloadProgress:" + i);
             }
         });
 
-        QbSdk.initX5Environment(getApplicationContext(),  cb);
+        QbSdk.initX5Environment(getApplicationContext(), cb);
     }
 
     /**
@@ -225,7 +245,7 @@ public class MainApplication extends Application {
     private void getStatusBarHeight() {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         int statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
-        PrefShared.saveInt(context,"statusBarHeight",statusBarHeight);
+        PrefShared.saveInt(context, "statusBarHeight", statusBarHeight);
     }
 
     /**
@@ -249,7 +269,7 @@ public class MainApplication extends Application {
         activityList.add(activity);
     }
 
-    public static List<Activity> getActivitys(){
+    public static List<Activity> getActivitys() {
         return activityList;
     }
 

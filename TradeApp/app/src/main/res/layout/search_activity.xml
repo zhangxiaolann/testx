@@ -1,15 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/webBg"
     android:orientation="vertical"
-    android:background="@color/webBg">
+    android:layout_margin="8dp"
+    app:childSpacing="auto"
+    app:childSpacingForLastRow="align"
+    app:flow="true"
+    app:rowSpacing="8dp">
 
     <RelativeLayout
         android:id="@+id/margin_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21.5dp"
         android:layout_marginBottom="15dp"
+        android:layout_marginTop="21.5dp"
         android:gravity="center">
 
         <EditText
@@ -17,57 +23,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:padding="3dp"
             android:layout_marginLeft="18dp"
             android:layout_marginRight="15dp"
             android:layout_toLeftOf="@+id/cancel"
             android:background="@drawable/edit_view_bg"
-            android:textCursorDrawable="@drawable/cursor_color"
-            android:imeOptions="actionSearch"
             android:drawableLeft="@mipmap/ico_search"
             android:hint="搜索你喜欢的宝贝"
+            android:imeOptions="actionSearch"
+            android:padding="3dp"
             android:singleLine="true"
-            android:textSize="15sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/text_btn_bg"
+            android:padding="5dp"
             android:text="取消"
-            android:textSize="16sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:layout_marginBottom="15dp">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
             android:layout_marginLeft="18dp"
             android:layout_marginRight="18dp"
+            android:paddingBottom="11dp"
+            android:paddingTop="11dp"
             android:text="热门搜索"
             android:textSize="16sp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/search_history"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
-            android:clipToPadding="false" />
+        <com.shhb.gd.shop.view.FlowLayout
+            android:id="@+id/search_flow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:childSpacing="auto"
+            app:childSpacingForLastRow="align"
+            app:flow="true"
+            app:rowSpacing="8dp"/>
 
     </LinearLayout>
 
@@ -80,10 +88,10 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp">
+            android:layout_marginRight="18dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,8 +109,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/text_btn_bg"
+                android:padding="6dp"
                 android:text="清除"
-                android:padding="3dp"
                 android:textSize="16sp" />
 
         </RelativeLayout>

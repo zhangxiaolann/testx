@@ -40,7 +40,7 @@ import okhttp3.Response;
 public class BaseTools {
     private static boolean isInitApp;//判断用户是否第一次安装
     private static int firstInstall;//1表示第一次安装
-    private static boolean isEncryt = false;
+    private static boolean isEncryt = true;
     private static ImageView noneImg;
 
     /**
