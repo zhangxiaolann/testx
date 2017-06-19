@@ -97,7 +97,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
         swipeToLoadLayout.setOnLoadMoreListener(this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.swipe_target);
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 2,LinearLayoutManager.VERTICAL, false);
+        final GridLayoutManager layoutManager = new GridLayoutManager(context, 2,LinearLayoutManager.VERTICAL, false);
         if(mType == 0){
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
                 @Override
@@ -118,7 +118,22 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickListener(this);
 
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                RecyclerView.LayoutManager mLayoutManager = recyclerView.getLayoutManager();
+//                int lastVisibleItem = ((LinearLayoutManager)mLayoutManager).findLastVisibleItemPosition();
+//                int totalItemCount = mLayoutManager.getItemCount();
+//                // dy>0 表示向下滑动
+//                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {//lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
+//                    if(!swipeToLoadLayout.isLoadingMore()){
+//                        swipeToLoadLayout.setLoadingMore(true);
+//                    }
+//                }
+//            }
+//        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE ){
@@ -132,13 +147,13 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String type){
-//        if(0 == type){
-//            swipeToLoadLayout.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    swipeToLoadLayout.setRefreshing(true);
-//                }
-//            });
+//        if(TextUtils.equals(type,"0")){
+            swipeToLoadLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeToLoadLayout.setRefreshing(true);
+                }
+            });
 //        }
     }
 
@@ -269,6 +284,9 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
                     @Override
                     public void run() {
                         mAdapter.addRecyclerData(listMap,mPageIndex);
+                        if(mPageIndex != 1){
+                            recyclerView.smoothScrollToPosition(mPageIndex * pageNum - 9);
+                        }
                     }
                 });
             }
@@ -345,7 +363,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
 
     private void closeLoading() {
         if (swipeToLoadLayout.isRefreshing()) {
-            swipeToLoadLayout.post(new Runnable() {
+            swipeToLoadLayout.post( new Runnable() {
                 @Override
                 public void run() {
                     swipeToLoadLayout.setRefreshing(false);

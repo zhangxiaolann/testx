@@ -127,7 +127,7 @@ public class MainApplication extends Application {
      * 初始化阿里相关组件
      */
     private void initAlib() {
-        initAndFix();
+        initHotfix();
         initBC();
     }
 
@@ -166,9 +166,9 @@ public class MainApplication extends Application {
     }
 
     /**
-     * 初始化AndFix
+     * 初始化initHotfix
      */
-    private void initAndFix() {
+    private void initHotfix() {
         String versionName = "";
         try {
             versionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;

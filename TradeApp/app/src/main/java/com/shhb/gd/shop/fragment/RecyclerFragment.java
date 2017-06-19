@@ -241,6 +241,9 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
                     @Override
                     public void run() {
                         mAdapter.addRecyclerData(listMap,mPageIndex);
+                        if(mPageIndex != 1){
+                            recyclerView.smoothScrollToPosition(mPageIndex * pageNum - 9);
+                        }
                     }
                 });
             }
