@@ -1,9 +1,7 @@
 package com.shhb.gd.shop.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -16,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -54,7 +51,7 @@ import okhttp3.Response;
  */
 
 public class MainFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener, MainFragmentAdapter.OnClickListener{
-    /** 1代表首页，2代表9块9；cId */
+    /** 1代表抢购，2代表9块9；0是首页的cId */
     private int fType,mType;
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
@@ -278,8 +275,11 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
                     map.put("shareUrl", jsonObject.getString("share_url"));
                     map.put("couponUrl",jsonObject.getString("url"));
                     listMap.add(map);
+                    if(mType == 0 && listMap.size() < 2){
+                        listMap.add(map);
+                        listMap.add(map);
+                    }
                 }
-                Log.e("商品列表的数据", JSON.toJSONString(listMap));
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

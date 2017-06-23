@@ -79,7 +79,6 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
                                  int dividerHeight, int dividerColor) {
         this.setOrientation(orientation);
         mDividerHeight = dividerHeight;
-        Log.e("mDividerHeight", mDividerHeight + "===================");
         //抗锯齿画笔
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(dividerColor);

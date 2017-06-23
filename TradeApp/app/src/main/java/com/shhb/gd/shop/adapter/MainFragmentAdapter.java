@@ -99,12 +99,11 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      */
     @Override
     public int getItemViewType(int position) {
-        Log.e("列表的size和postion",getItemCount()+"|"+position);
         if (position == 0 && mType == 0){
             return TYPE_BANNER;
         } else if(position == 1 && mType == 0){
             return TYPE_GROUP;
-        } /*else if(position >= (getItemCount() + 1) || (mPageIndex != 0 && mListSize == 0)){
+        } /*else if (position >= (getItemCount() + 1) || (mPageIndex != 0 && mListSize == 0)) {
             return TYPE_FOOTER;
         }*/ else {
             return TYPE_RECYCLER;
@@ -114,8 +113,8 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     /** 初始化布局包括布局的位置和大小 */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        int type = getItemViewType(i);
         View itemView;
+        int type = getItemViewType(i);
         switch (type){
             case TYPE_BANNER:
                 itemView = inflate(viewGroup, R.layout.banner_view);
@@ -126,12 +125,14 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_RECYCLER:
                 itemView = inflate(viewGroup, R.layout.recycler_item);
                 return new RecyclerHolder(itemView);
-            case TYPE_FOOTER:
-                itemView = inflate(viewGroup, R.layout.footer_view);
-                return new FooterHolder(itemView);
+//            case TYPE_FOOTER:
+//                itemView = inflate(viewGroup, R.layout.footer_view);
+//                return new FooterHolder(itemView);
         }
         throw new IllegalArgumentException("Wrong type!");
+
     }
+
 
     /**
      * 填充页面的方法
@@ -151,14 +152,9 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_BANNER:
                 onBindBannerHolder((BannerHolder) viewHolder,i);
                 break;
-//            case TYPE_GROUP:
-//                onBindGroupHolder((GroupHolder) viewHolder);
-//                break;
             case TYPE_RECYCLER:
                 onBindRecyclerHolder((RecyclerHolder) viewHolder,i);
                 break;
-//            case TYPE_FOOTER:
-//                break;
         }
     }
 
