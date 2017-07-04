@@ -127,6 +127,9 @@
         <activity
             android:name=".activity.ProtocolActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 微信分享 -->
         <activity

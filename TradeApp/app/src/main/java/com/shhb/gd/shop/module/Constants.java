@@ -42,6 +42,8 @@ public class Constants {
     public static final String FIND_BY_TABS_LOAD = REQUEST + "GoodsShow/showGoods";
     /** 热门搜索*/
     public static final String FIND_BY_HOT = REQUEST + "GoodsShow/hotTab";
+    /** 搜索你喜欢的宝贝*/
+    public static final String FIND_BY_BABY = REQUEST + "GoodsShow/searchGoods";
     /** 首页商品*/
     public static final String FIND_BY_GOODS1 = REQUEST + "GoodsShow/soldGoods";
     /** 商品详情*/
