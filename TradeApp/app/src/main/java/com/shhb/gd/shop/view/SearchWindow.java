@@ -84,9 +84,9 @@ public class SearchWindow extends PopupWindow implements View.OnClickListener,Se
         @Override
         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
             if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                if(!TextUtils.equals(search2.getText().toString().trim(),"")){
+                if(!TextUtils.equals(textView.getText().toString().trim(),"")){
                     Intent intent = new Intent(context, SearchActivity.class);
-                    intent.putExtra("name",search2.getText().toString().trim());
+                    intent.putExtra("name",textView.getText().toString().trim());
                     context.startActivity(new Intent(context, SearchActivity.class));
                 }
             }

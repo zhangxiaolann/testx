@@ -60,7 +60,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
     private int mPageIndex = 1;
     /** 每页请求数量*/
     private final static int pageNum = 10;
-    /** 每页请求数量*/
+    /** 区分是否第二次进来*/
     private int lifeCycle = 1;
 
     public static MainFragment newInstance(String type) {
@@ -223,7 +223,6 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                closeLoading();
                 String json = response.body().string();
                 json = BaseTools.decryptJson(json);
                 updateListView(json);
@@ -280,9 +279,10 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
                         listMap.add(map);
                     }
                 }
-                context.runOnUiThread(new Runnable() {
+                recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
+                        closeLoading();
                         mAdapter.addRecyclerData(listMap,mPageIndex);
                         if(mPageIndex != 1){
                             recyclerView.smoothScrollToPosition(mPageIndex * pageNum - 9);

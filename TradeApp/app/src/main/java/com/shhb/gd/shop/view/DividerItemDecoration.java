@@ -181,7 +181,6 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             //item底部的Y轴坐标+margin值
             final int y = child.getBottom() + layoutParams.bottomMargin;
             final int height = y + mDividerHeight;
-            Log.e("height", height + "===================");
             if (mDrawable != null) {
                 //setBounds(x,y,width,height); x:组件在容器X轴上的起点 y:组件在容器Y轴上的起点
                 // width:组件的长度 height:组件的高度

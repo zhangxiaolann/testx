@@ -190,7 +190,6 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                closeLoading();
                 String json = response.body().string();
                 json = BaseTools.decryptJson(json);
                 updateListView(json);
@@ -237,9 +236,10 @@ public class RecyclerFragment extends BaseFragment implements OnRefreshListener,
                     listMap.add(map);
                 }
                 Log.e("商品列表的数据", JSON.toJSONString(listMap));
-                context.runOnUiThread(new Runnable() {
+                recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
+                        closeLoading();
                         mAdapter.addRecyclerData(listMap,mPageIndex);
                         if(mPageIndex != 1){
                             recyclerView.smoothScrollToPosition(mPageIndex * pageNum - 9);

@@ -13,14 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchWindowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    /** 哪一个Fragment*/
-    private final int fType;
     /** recycler的数据 */
     private final List<Map<String, Object>> listMap;
     private static OnClickListener onClickListener;
 
     public SearchWindowAdapter(int type){
-        fType = type;
         listMap = new ArrayList<>();
     }
 
