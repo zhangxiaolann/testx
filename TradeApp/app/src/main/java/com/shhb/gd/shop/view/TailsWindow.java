@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -121,6 +122,7 @@ public class TailsWindow extends PopupWindow {
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
             schedule.setProgress(newProgress);
+            Log.e("优惠券地址",view.getUrl());
             if (newProgress == 100) {
                 schedule.setVisibility(View.GONE);
                 if (!TextUtils.equals(numId, "")) {
