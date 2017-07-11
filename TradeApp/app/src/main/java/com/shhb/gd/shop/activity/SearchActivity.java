@@ -1,6 +1,7 @@
 package com.shhb.gd.shop.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ali.auth.third.ui.context.CallbackContext;
+import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -19,12 +22,14 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.jaeger.library.StatusBarUtil;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.adapter.SearchActivityAdapter;
+import com.shhb.gd.shop.listener.ShareOrShowBReceiver;
 import com.shhb.gd.shop.module.AlibcUser;
 import com.shhb.gd.shop.module.Constants;
 import com.shhb.gd.shop.tools.BaseTools;
 import com.shhb.gd.shop.tools.OkHttpUtils;
 import com.shhb.gd.shop.tools.PrefShared;
 import com.shhb.gd.shop.view.DividerItemDecoration;
+import com.umeng.socialize.UMShareAPI;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +53,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private SwipeToLoadLayout swipeToLoadLayout;
     private RecyclerView recyclerView;
     private SearchActivityAdapter mAdapter;
+    private ShareOrShowBReceiver shareOrShowBR;
     /** 请求页码*/
     private int mPageIndex = 1;
     /** 每页请求数量*/
@@ -60,6 +66,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.search_activity);
         babyName = getIntent().getStringExtra("name");
         initView();
+        intiShareBReceiver();
     }
 
     private void initView() {
@@ -81,6 +88,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickListener(this);
         requestData();
+    }
+
+    /**
+     * 创建分享的监听
+     */
+    private void intiShareBReceiver() {
+        IntentFilter intentFilter = new IntentFilter(Constants.SENDMSG_SHARE);
+        shareOrShowBR = new ShareOrShowBReceiver();
+        registerReceiver(shareOrShowBR, intentFilter);
     }
 
     /**
@@ -260,15 +276,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     jsonObject.put("share_url", listMap.get(position).get("shareUrl") + "");
                     if (null != userId && !TextUtils.equals(userId, "")) {
                         if (null != nick && !TextUtils.equals(nick, "")) {
-                            intent = new Intent(context, DetailsActivity.class);
+                            intent = new Intent(this, DetailsActivity.class);
                             intent.putExtra("result", jsonObject.toString());
-                            context.startActivity(intent);
+                            this.startActivity(intent);
                         } else {
-                            new AlibcUser(context).login();
+                            new AlibcUser(this).login();
                         }
                     } else {
-                        intent = new Intent(context, LoginActivity.class);
-                        context.startActivity(intent);
+                        intent = new Intent(this, LoginActivity.class);
+                        this.startActivity(intent);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -277,8 +293,27 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    /**
+     * 淘宝和友盟的回调
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        CallbackContext.onActivityResult(requestCode, resultCode, data);//阿里的回调
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);//友盟精简版的回调
+    }
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setTranslucentForImageView(this, 0, mViewNeedOffset);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(shareOrShowBR);
+        AlibcTradeSDK.destory();
+        super.onDestroy();
     }
 }

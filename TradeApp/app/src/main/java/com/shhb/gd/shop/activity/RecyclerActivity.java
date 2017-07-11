@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ali.auth.third.ui.context.CallbackContext;
+import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
 import com.shhb.gd.shop.R;
 import com.shhb.gd.shop.adapter.MainAdapter;
 import com.shhb.gd.shop.fragment.Fragment5;
@@ -128,6 +129,7 @@ public class RecyclerActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         unregisterReceiver(shareOrShowBR);
+        AlibcTradeSDK.destory();
         super.onDestroy();
     }
 }

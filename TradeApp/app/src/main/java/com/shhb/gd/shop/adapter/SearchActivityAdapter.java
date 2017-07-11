@@ -125,7 +125,6 @@ public class SearchActivityAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.share_img:
-                    Log.e("adapter分享","被点击");
                     onClickListener.onClick(2,getPosition(),listMap);
                     break;
                 default:

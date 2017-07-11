@@ -13,12 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchWindowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private int type = 0;
     /** recycler的数据 */
     private final List<Map<String, Object>> listMap;
     private static OnClickListener onClickListener;
 
     public SearchWindowAdapter(int type){
         listMap = new ArrayList<>();
+        this.type = type;
     }
 
     /**
@@ -26,7 +28,11 @@ public class SearchWindowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      * @param datas
      */
     public void addRecyclerData(List<Map<String, Object>> datas) {
+        if(!listMap.isEmpty()){
+            listMap.clear();
+        }
         listMap.addAll(datas);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -36,7 +42,12 @@ public class SearchWindowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View itemView = inflate(viewGroup, R.layout.hot_view);
+        View itemView;
+        if(type == 1){
+            itemView = inflate(viewGroup, R.layout.hot_view1);
+        } else {
+            itemView = inflate(viewGroup, R.layout.hot_view2);
+        }
         return new RecyclerHolder(itemView);
     }
 
