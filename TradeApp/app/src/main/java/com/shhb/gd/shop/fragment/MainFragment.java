@@ -417,7 +417,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
                 jsonObject = new JSONObject();
                 jsonObject.put("numId", listMap.get(position).get("numId") + "");
                 jsonObject.put("title", "惠淘分享，" + listMap.get(position).get("title") + "");
-                jsonObject.put("shareContent", "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+                jsonObject.put("shareContent", "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜哦！");
                 jsonObject.put("shareImg", listMap.get(position).get("imgUrl") + "");
                 jsonObject.put("shareUrl", listMap.get(position).get("shareUrl") + "");
                 intent = new Intent(Constants.SENDMSG_SHARE);
@@ -433,7 +433,7 @@ public class MainFragment extends BaseFragment implements OnRefreshListener, OnL
                     jsonObject.put("goods_id", listMap.get(position).get("numId") + "");
                     jsonObject.put("vocher_url", listMap.get(position).get("couponUrl") + "");
                     jsonObject.put("title", "惠淘分享，" + listMap.get(position).get("title") + "");
-                    jsonObject.put("content", "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜！");
+                    jsonObject.put("content", "超值优惠券等你来领，领卷购物更便宜，还有更多惊喜哦！");
                     jsonObject.put("share_img", listMap.get(position).get("imgUrl") + "");
                     jsonObject.put("share_url", listMap.get(position).get("shareUrl") + "");
                     if (null != userId && !TextUtils.equals(userId, "")) {
